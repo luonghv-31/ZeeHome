@@ -13,6 +13,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
 
 bool isRememberMe = false;
+bool isShowHidePass = true;
 
   Widget buildEmail(){
   return Column(
@@ -95,10 +96,11 @@ Widget buildPassword(){
         height: 60,
         // ignore: prefer_const_constructors
         child: TextField(
-          obscureText: true,
+          obscureText: isShowHidePass,
           style: TextStyle(
             color: Colors.black87
           ),
+          
           decoration: InputDecoration(
             border: InputBorder.none,
             contentPadding: EdgeInsets.only(top:14),
@@ -110,12 +112,25 @@ Widget buildPassword(){
             hintText: 'Nhập mật khẩu',
             hintStyle: TextStyle(
               color: Colors.black38
-            )
+            ),
+            suffixIcon: showHidePass(),
           ),
         ),
       )
     ],
   );
+}
+
+Widget showHidePass(){
+  return IconButton(
+    onPressed: (){
+      setState(() {
+        isShowHidePass = !isShowHidePass;
+      });
+    }, 
+    icon: isShowHidePass ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
+    color: Colors.green,
+    );
 }
 
 Widget buidForgotPassBtn() {
@@ -176,8 +191,13 @@ Widget buildLoginBtn(){
     padding: EdgeInsets.symmetric(vertical: 25),
     width: double.infinity,
     child: ElevatedButton(
-    style: ButtonStyle(
-      
+    style: ElevatedButton.styleFrom(
+      elevation: 5,
+      padding: EdgeInsets.all(15),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15)
+      ),
+      backgroundColor: Color(0xFF242AE1)
     ),
       
     onPressed: () { },
@@ -194,15 +214,15 @@ Widget buildAccout() {
           TextSpan(
           text: 'Chưa có tài khoản?',
           style: TextStyle(
-          color: Colors.white,
+          color: Color.fromARGB(255, 106, 23, 238),
           fontSize: 18,
           fontWeight: FontWeight.w500,
             ),
           ),
           TextSpan(
-            text: 'Đăng kí ngay.',
+            text: ' Đăng kí ngay.',
             style: TextStyle(
-              color: Colors.white,
+              color: Color.fromARGB(255, 106, 23, 238),
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),

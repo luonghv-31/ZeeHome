@@ -1,3 +1,3 @@
-# zee_home
+# Zee Home App
 
 A new Flutter project.

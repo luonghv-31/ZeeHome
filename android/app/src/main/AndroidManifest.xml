@@ -4,6 +4,8 @@
         android:label="zee_home"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
+       <meta-data android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyAT-29Vo1xQZU4nCKMCgvKfRivVJ2KkHhU"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

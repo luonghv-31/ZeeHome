@@ -9,6 +9,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_svg: ^2.0.5
+  google_maps_flutter: ^2.2.5
+  http: ^0.13.5
+  location: ^4.4.0
+  provider: ^6.0.5
 
 dev_dependencies:
   flutter_test:
@@ -16,15 +21,25 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_launcher_icons: ^0.12.0
 
-
 flutter:
   uses-material-design: true
   assets:
-  - assets/images/login.jpeg
+  - assets/images/background2.jpg
+  - assets/images/app-bg.jpg
   
   - assets/logo.png
-
-
+  - assets/icon/back_arrow.svg
+  - assets/icon/heart-icon.svg
+  - assets/icon/flower.svg
+  - assets/icon/icon_2.svg
+  - assets/icon/icon_3.svg
+  - assets/icon/icon_4.svg
+  - assets/icon/menu.svg
+  - assets/icon/more.svg
+  - assets/icon/search.svg
+  - assets/icon/sun.svg
+  - assets/icon/user-icon.svg
+  - assets/icon/location_pin.svg
 
 flutter_icons:
   android: "launcher_icon"

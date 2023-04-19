@@ -21,8 +21,6 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isRememberMe = false;
   bool isShowHidePass = true;
 
-  Auth auth = Auth(access_token: '', refresh_token: '');
-
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -253,18 +251,43 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
 
         onPressed: () {
-          SignInRequest.fetchAuth(usernameController.text, passwordController.text).then((data) {
-            setState(() {
-              access_token: data.access_token;
-              reresh_token: data.refresh_token;
-            });
+          if (usernameController.text == Null || passwordController.text == Null) {
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: const Text('Cảnh báo'),
+                content: const Text('Tài khoản hoặc mật khẩu không đúng'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'Cancel'),
+                    child: const Text('Ok'),
+                  ),
+                ],
+              ),
+            );
+          }
 
+          SignInRequest.fetchAuth(usernameController.text, passwordController.text).then((data) {
             authProvider.setAccessToken(data.access_token);
 
             GetUserRequest.fetchUser(data.access_token).then((data) => {
               userProvider.set(data.gender, data.phoneNumber, data.intro, data.image, data.birthDate, data.firstName, data.lastName, data.email, data.registerAt, data.banned, data.avgRating, data.title, data.role, data.userId, data.balance),
               Navigator.of(context).push(scaleIn(HomeScreen()))
-          });
+            });
+          }).catchError((error) {
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: const Text('Cảnh báo'),
+                content: const Text('Tài khoản hoặc mật khẩu không đúng'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'Cancel'),
+                    child: const Text('Ok'),
+                  ),
+                ],
+              ),
+            );
           });
         },
         child: Text('Đăng nhập', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),),

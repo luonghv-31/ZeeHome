@@ -1,4 +1,5 @@
 class House {
+  String? houseId;
   double? latitude;
   double? longitude;
   String? title;
@@ -28,7 +29,9 @@ class House {
   Owner? owner;
 
   House(
-      {this.latitude,
+      {
+        this.houseId,
+        this.latitude,
         this.longitude,
         this.title,
         this.createdDate,
@@ -56,38 +59,42 @@ class House {
         this.furnished,
         this.owner});
 
-  House.fromJson(Map<String, dynamic> json) {
-    latitude = json['latitude'];
-    longitude = json['longitude'];
-    title = json['title'];
-    createdDate = json['createdDate'];
-    address = json['address'];
-    ward = json['ward'];
-    district = json['district'];
-    province = json['province'];
-    houseCategory = json['houseCategory'];
-    houseType = json['houseType'];
-    thumbnail = json['thumbnail'];
-    images = json['images'].cast<String>();
-    price = json['price'];
-    video = json['video'];
-    visible = json['visible'];
-    square = json['square'];
-    description = json['description'];
-    ac = json['ac'];
-    parking = json['parking'];
-    elevator = json['elevator'];
-    pet = json['pet'];
-    rooms = json['rooms'];
-    bathRooms = json['bathRooms'];
-    bedRooms = json['bedRooms'];
-    maintenanceFee = json['maintenanceFee'];
-    furnished = json['furnished'];
-    owner = json['owner'] != null ? Owner.fromJson(json['owner']) : null;
+  factory House.fromJson(Map<String, dynamic> json) {
+    return House(
+      houseId: json['houseId'].toString(),
+      latitude: json['latitude'] as double,
+      longitude: json['longitude'] as double,
+      title: json['title'].toString(),
+      createdDate: json['createdDate'].toString(),
+      address: json['address'].toString(),
+      ward: json['ward'].toString(),
+      district: json['district'].toString(),
+      province: json['province'].toString(),
+      houseCategory: json['houseCategory'] as int?,
+      houseType: json['houseType'] as int?,
+      thumbnail: json['thumbnail'].toString(),
+      images: json['images'] == Null ? (json['images'] as List)?.map((e) => e as String)?.toList() : null,
+      price: json['price'] as double?,
+      video: json['video'].toString(),
+      visible: json['visible'] as bool?,
+      square: json['square'] as double?,
+      description: json['description'].toString(),
+      ac: json['ac'] as bool?,
+      parking: json['parking'] as bool?,
+      elevator: json['elevator'] as bool?,
+      pet: json['pet'] as bool?,
+      rooms: json['rooms'] as int?,
+      bathRooms: json['bathRooms'] as int?,
+      bedRooms: json['bedRooms'] as int?,
+      maintenanceFee: json['maintenanceFee'] as double?,
+      furnished: json['furnished'] as bool?,
+      owner: json['owner'] != null ? Owner.fromJson(json['owner']) : null as Owner?,
+    );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['houseId'] = this.houseId;
     data['latitude'] = this.latitude;
     data['longitude'] = this.longitude;
     data['title'] = this.title;

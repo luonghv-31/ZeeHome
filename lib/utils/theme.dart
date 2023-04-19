@@ -27,18 +27,18 @@ ThemeData lightTheme(BuildContext context) {
       focusedBorder: lightThemeOutlineInputBorder,
       disabledBorder: lightThemeOutlineInputBorder,
     ),
-    // elevatedButtonTheme: ElevatedButtonThemeData(
-    //   style: ElevatedButton.styleFrom(
-    //     elevation: 0,
-    //     minimumSize: const Size(double.infinity, 48),
-    //     shape: const StadiumBorder(),
-    //     backgroundColor: primaryColor,
-    //     textStyle: const TextStyle(
-    //       color: Colors.white,
-    //       fontWeight: FontWeight.w600,
-    //     ),
-    //   ),
-    // ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        elevation: 0,
+        minimumSize: const Size(double.infinity, 48),
+        shape: const StadiumBorder(),
+        backgroundColor: primaryColor,
+        textStyle: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    ),
     iconTheme: const IconThemeData(color: textColorLightTheme),
     dividerColor: secondaryColor5LightTheme,
   );

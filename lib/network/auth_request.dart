@@ -15,6 +15,7 @@ class SignInRequest {
   }
 
   static Future<Auth> fetchAuth(String username, String password) async {
+
     final response = await http.post(
         Uri.parse(url),
         headers: <String, String> {
@@ -28,8 +29,12 @@ class SignInRequest {
           'grant_type': 'password',
           'client_secret': '11UJJdC8M4fx3C7YzdlD2X9ruVcC9W3j',
         },
+    ).timeout(
+      const Duration(seconds: 3),
+      onTimeout: () {
+        throw Exception('Some error happen'); // Request Timeout response status code
+      },
     );
-    developer.log('${response.statusCode}');
     if (response.statusCode == 200) {
       // developer.log(response.body);
       return compute( parseAuth, response.body);

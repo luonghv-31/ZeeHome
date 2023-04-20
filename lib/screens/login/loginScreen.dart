@@ -10,6 +10,7 @@ import 'package:zeehome/network/auth_request.dart';
 import 'package:zeehome/network/user_request.dart';
 
 import 'package:zeehome/screens/home/homeScreen.dart';
+import 'package:zeehome/screens/login/signUpScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -241,7 +242,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Consumer2<AuthProvider, UserProvider>(builder: (context, authProvider, userProvider, child) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25),
-      width: double.infinity,
+      width: 170,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
             elevation: 5,
@@ -272,16 +273,18 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   });
   }
-  Widget buildAccout() {
+  Widget buildAccount() {
   return GestureDetector(
-    onTap: () => print('Ok'),
+    onTap: (){
+      Navigator.of(context).push(scaleIn(SignUpScreen()));
+    },
     child: RichText(
       text: TextSpan(
         children: [
           TextSpan(
           text: 'Chưa có tài khoản?',
           style: TextStyle(
-          color: Color.fromARGB(255, 106, 23, 238),
+          color: Color.fromARGB(255, 251, 251, 251),
           fontSize: 18,
           fontWeight: FontWeight.w500,
             ),
@@ -289,7 +292,7 @@ class _LoginScreenState extends State<LoginScreen> {
           TextSpan(
             text: ' Đăng kí ngay.',
             style: TextStyle(
-              color: Color.fromARGB(255, 106, 23, 238),
+              color: Color.fromARGB(255, 255, 248, 249),
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
@@ -360,7 +363,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   
                   buildRememberCb(),
                   buildLoginBtn(),
-                  buildAccout()
+                  buildAccount()
                 ],
               ),
               ),

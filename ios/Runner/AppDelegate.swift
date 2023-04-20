@@ -1,5 +1,8 @@
 import UIKit
 import Flutter
+#include "AppDelegate.h"
+#include "GeneratedPluginRegistrant.h"
+#import "GoogleMaps/GoogleMaps.h"
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -12,3 +15,4 @@ import Flutter
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }
+

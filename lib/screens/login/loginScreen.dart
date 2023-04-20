@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
       Text(
-        'Tên người dùng',
+        'Email',
         style: TextStyle(
           color: Colors.white,
           fontSize: 16,
@@ -84,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Icons.account_circle_outlined,
               color: Color(0xff5ac18e),
             ),
-            hintText: 'Nhập tên người dùng',
+            hintText: 'Nhập email của bạn',
             hintStyle: TextStyle(
               color: Colors.black38
             )

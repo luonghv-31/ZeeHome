@@ -1,10 +1,14 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:namefully/namefully.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:zeehome/network/signup_request.dart';
 
 class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
+
   @override
   _SignUpScreen createState() => _SignUpScreen();
 }
@@ -19,6 +23,8 @@ class _SignUpScreen extends State<SignUpScreen> {
   final dateOfBirthController = TextEditingController();
   final passWordController = TextEditingController();
   final registerAtController = TextEditingController();
+  final _controller = TextEditingController();
+  
   var _dropDownValue = null;
   Widget fullName() {
     return Column(
@@ -90,8 +96,8 @@ class _SignUpScreen extends State<SignUpScreen> {
           height: 60,
           // ignore: prefer_const_constructors
           child: TextField(
-            controller: firstNameController,
-            keyboardType: TextInputType.emailAddress,
+            controller: phoneNumberController,
+            
             style: TextStyle(color: Colors.black87),
             decoration: InputDecoration(
                 border: InputBorder.none,
@@ -132,8 +138,8 @@ class _SignUpScreen extends State<SignUpScreen> {
           height: 60,
           // ignore: prefer_const_constructors
           child: TextField(
-            controller: firstNameController,
-            keyboardType: TextInputType.emailAddress,
+            controller: emailController,
+            
             style: TextStyle(color: Colors.black87),
             decoration: InputDecoration(
                 border: InputBorder.none,
@@ -149,14 +155,14 @@ class _SignUpScreen extends State<SignUpScreen> {
       ],
     );
   }
-
+List<String> testval = ['male', 'female'];
   Widget gender_Birth() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
          child: Column(children: <Widget>[
-             SizedBox(height: 10),
+             SizedBox(height: 15),
             Container(
           child: DropdownButtonFormField(
             borderRadius: BorderRadius.circular(10),
@@ -175,7 +181,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                   ),
             isExpanded: true,
             iconSize: 30.0,
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color: Colors.black),            
             items: ['Nam', 'Nữ'].map(
               (val) {
                 return DropdownMenuItem<String>(
@@ -190,6 +196,10 @@ class _SignUpScreen extends State<SignUpScreen> {
                   _dropDownValue = val;
                   print(_dropDownValue);
                   genderController.text = _dropDownValue;
+                  genderController.text == 'Nam' 
+                  ? genderController.text = genderController.text.replaceAll('Nam', 'male') 
+                  : genderController.text = genderController.text.replaceAll('Nữ', 'female'); 
+                  
                 },
               );
             },
@@ -200,7 +210,7 @@ class _SignUpScreen extends State<SignUpScreen> {
         Expanded(
           flex: 2,
           child: Column(children: <Widget>[
-             SizedBox(height: 10),
+             SizedBox(height: 15),
              
             Container(
               
@@ -225,6 +235,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                     showTitleActions: true,
                     minTime: DateTime(1973, 1, 1),
                     maxTime: DateTime(2004, 12, 31),
+                    locale: LocaleType.vi,
                     theme: DatePickerTheme(
                       
                       headerColor: Colors.orange,
@@ -279,8 +290,8 @@ class _SignUpScreen extends State<SignUpScreen> {
           height: 60,
           // ignore: prefer_const_constructors
           child: TextField(
-            controller: firstNameController,
-            keyboardType: TextInputType.emailAddress,
+            controller: passWordController,
+            
             style: TextStyle(color: Colors.black87),
             decoration: InputDecoration(
                 border: InputBorder.none,
@@ -320,9 +331,8 @@ class _SignUpScreen extends State<SignUpScreen> {
               ]),
           height: 60,
           // ignore: prefer_const_constructors
-          child: TextField(
-            controller: firstNameController,
-            keyboardType: TextInputType.emailAddress,
+          child: TextField(            
+            controller: registerAtController,      
             style: TextStyle(color: Colors.black87),
             decoration: InputDecoration(
                 border: InputBorder.none,
@@ -331,14 +341,46 @@ class _SignUpScreen extends State<SignUpScreen> {
                   Icons.lock,
                   color: Color(0xff5ac18e),
                 ),
+                // errorText: _errorText,
                 hintText: 'Nhập mật khẩu',
                 hintStyle: TextStyle(color: Colors.black38)),
                 
-          ),
+          ),  
         )
       ],
     );
   }
+
+  // tach ho dem va ten
+  void Full_name(String t){
+    var name = Namefully(fullNameController.text);
+    firstNameController.text = fullNameController.text.replaceAll(name.last, '');
+    lastNameController.text = name.last;
+    print(firstNameController);
+    print(lastNameController);
+  }
+
+  void validate(String genderController, String phoneNumberController, String dateOfBirthController, String firstNameController, 
+  String lastNameController, String emailController, String passWordController)
+  {
+
+  }
+
+String? get _errorText {
+  // at any time, we can get the text from _controller.value.text
+  final text = _controller.value.text;
+  // Note: you can do your own custom validation here
+  // Move this logic this outside the widget for more testable code
+  if (text.isEmpty) {
+    return 'Can\'t be empty';
+  }
+  if (text.length < 4) {
+    return 'Too short';
+  }
+  // return null if the text is valid
+  return null;
+}
+
 
   Widget signInbtn(){
     return Container(
@@ -354,7 +396,19 @@ class _SignUpScreen extends State<SignUpScreen> {
             backgroundColor: Color.fromARGB(255, 0, 106, 255)
         ),
         onPressed: (){
-          print('okkk');
+          Full_name(fullNameController.text);
+          SignUpRequest.createAcount(
+            genderController.text,
+            phoneNumberController.text,
+            dateOfBirthController.text,
+            firstNameController.text,
+            lastNameController.text,
+            emailController.text,
+            passWordController.text
+            
+          );
+
+         
         },
         child: Text('Đăng ký',style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),) ,
       ),

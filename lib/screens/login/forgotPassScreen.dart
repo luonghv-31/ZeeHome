@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:zeehome/network/forget_pass_request.dart';
+import 'package:email_validator/email_validator.dart';
 
-class forgotPass extends StatefulWidget{
+class forgotPass extends StatefulWidget {
   @override
   _forgotPass createState() => _forgotPass();
 }
 
-class _forgotPass extends State<forgotPass>{
+class _forgotPass extends State<forgotPass> {
+  final inputEmailController = TextEditingController();
+  bool _isShow = false;
 
-final inputEmailController = TextEditingController();
-
-  Widget inputEmail(){
+  Widget inputEmail() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          'Email',
+          '',
           style: TextStyle(
               color: Color.fromARGB(255, 0, 0, 0),
               fontSize: 16,
@@ -28,7 +29,7 @@ final inputEmailController = TextEditingController();
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
-              boxShadow:  [
+              boxShadow: [
                 BoxShadow(
                     color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
               ]),
@@ -36,25 +37,43 @@ final inputEmailController = TextEditingController();
           // ignore: prefer_const_constructors
           child: TextField(
             controller: inputEmailController,
-            
             style: TextStyle(color: Colors.black87),
             decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14),
-                prefixIcon: Icon(
-                  Icons.email,
-                  color: Color(0xff5ac18e),
-                ),
-                hintText: 'Nhập Email của bạn',
-                hintStyle: TextStyle(color: Colors.black38)),
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.only(top: 14),
+              prefixIcon: Icon(
+                Icons.email,
+                color: Color(0xff5ac18e),
+              ),
+              hintText: 'Nhập Email đã đăng ký!',
+              hintStyle: TextStyle(color: Colors.black38),
+            ),
           ),
-        )
+        ),
+        Align(
+          alignment: Alignment.center,
+          child: Visibility(
+            visible: _isShow,
+            child: const Text(
+              'Vui lòng nhập đúng định dạng Email!',
+              style: TextStyle(
+                height: 2,
+                fontSize: 15,
+                color: Color.fromARGB(255, 0, 246, 226),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
 
-  Widget buildSendEmailBtn(){
-    
+  bool isValidEmail(String email) {
+    bool isvalid = EmailValidator.validate(inputEmailController.text);
+    return isvalid;
+  }
+
+  Widget buildSendEmailBtn() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25),
       width: 170,
@@ -62,25 +81,32 @@ final inputEmailController = TextEditingController();
         style: ElevatedButton.styleFrom(
             elevation: 5,
             padding: EdgeInsets.all(15),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(6)
-            ),
-            backgroundColor: Color.fromARGB(255, 0, 106, 255)
-        ),
-
-        onPressed: () {          
-           ResetPass.sendEmail(inputEmailController.text);
-           print(inputEmailController);
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+            backgroundColor: Color.fromARGB(255, 0, 106, 255)),
+        onPressed: () {
+          if (isValidEmail(inputEmailController.text) == true) {
+            setState(() {
+              _isShow = false;
+            });
+            ResetPass.sendEmail(inputEmailController.text);
+          } else
+            setState(() {
+              _isShow = true;
+            });
         },
-        child: Text('Gửi Email', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),),
+        child: Text(
+          'Gửi Email',
+          style: TextStyle(
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
+        ),
       ),
     );
   }
-  
 
   @override
   Widget build(BuildContext context) {
-   return Scaffold(
+    return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
@@ -113,11 +139,9 @@ final inputEmailController = TextEditingController();
               height: double.infinity,
               width: double.infinity,
               decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/signin2.jpg"),
-                  fit: BoxFit.cover
-                )
-              ),
+                  image: DecorationImage(
+                      image: AssetImage("assets/images/signin2.jpg"),
+                      fit: BoxFit.cover)),
               child: SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
                 padding: EdgeInsets.symmetric(
@@ -127,10 +151,9 @@ final inputEmailController = TextEditingController();
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                   inputEmail(),
-                   SizedBox(height:10),
-                   buildSendEmailBtn()
-                      
+                      inputEmail(),
+                      SizedBox(height: 10),
+                      buildSendEmailBtn()
                     ]),
               ),
             ),
@@ -139,6 +162,4 @@ final inputEmailController = TextEditingController();
       ),
     );
   }
-     
-  }
-
+}

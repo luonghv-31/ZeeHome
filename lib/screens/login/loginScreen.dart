@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, library_private_types_in_public_api, use_key_in_widget_constructors, duplicate_ignore
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +9,7 @@ import 'package:zeehome/network/user_request.dart';
 import 'package:zeehome/screens/home/homeScreen.dart';
 import 'package:zeehome/screens/login/signUpScreen.dart';
 import 'package:zeehome/screens/login/forgotPassScreen.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -26,6 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+  final store = const FlutterSecureStorage();
 
   @override
   void initState() {

@@ -17,7 +17,7 @@ dependencies:
   namefully: ^0.2.0
   flutter_datetime_picker: ^1.5.1
   intl: ^0.18.1
-  flutter_secure_storage: ^8.0.0
+  shared_preferences: ^2.1.0
   email_validator: ^2.1.17
   
 

@@ -1,11 +1,13 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
-import 'package:moment_dart/moment_dart.dart';
 
- const String url = 'https://huydt.online/api/auth/signup';
+
+const String url = 'https://huydt.online/api/auth/signup';
+ 
 
 class SignUpRequest {
   static createAcount(
@@ -17,7 +19,7 @@ class SignUpRequest {
     String email,
     String password,
   ) async {
-    
+     
     String registerAt = '${DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime.now().add( const Duration(hours: 9, minutes: -10)))}Z';
     Map data = {
       'gender': gender,
@@ -43,7 +45,8 @@ class SignUpRequest {
        body: jsonEncode(data),
        encoding: Encoding.getByName('utf-8')
     );
-    
     print(response.statusCode);
+    return response;
+    
   }
 }

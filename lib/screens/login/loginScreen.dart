@@ -8,9 +8,9 @@ import 'package:zeehome/model/authProvider.dart';
 import 'package:zeehome/model/userProvider.dart';
 import 'package:zeehome/network/auth_request.dart';
 import 'package:zeehome/network/user_request.dart';
-
 import 'package:zeehome/screens/home/homeScreen.dart';
 import 'package:zeehome/screens/login/signUpScreen.dart';
+import 'package:zeehome/screens/login/forgotPassScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -170,7 +170,9 @@ class _LoginScreenState extends State<LoginScreen> {
             
         padding: EdgeInsets.only(right: 0),        
       ),
-      onPressed: ()=> print('quenmk'),
+      onPressed: (){
+        Navigator.of(context).push(scaleIn(forgotPass()));
+      },
       
       child: Text(
         'Quên mật khẩu?',
@@ -213,30 +215,7 @@ class _LoginScreenState extends State<LoginScreen> {
   );
   }
 
-  Route scaleIn(Widget page) {
-    return PageRouteBuilder(
-      transitionDuration: const Duration(milliseconds: 300),
-      pageBuilder: (context, animation, secondaryAnimation) => page,
-      transitionsBuilder: (context, animation, secondaryAnimation, page) {
-        var begin = 0.9;
-        var end = 1.0;
-        var curve = Curves.easeInOutBack;
-
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-        var tween2 = Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: curve));
-
-
-        return ScaleTransition(
-          scale: animation.drive(tween),
-          child: FadeTransition(
-                  opacity: animation.drive(tween2),
-                  child: page,
-                ),
-        );
-      },
-    );
-  }
+ 
 
   Widget buildLoginBtn(){
     return Consumer2<AuthProvider, UserProvider>(builder: (context, authProvider, userProvider, child) {
@@ -304,6 +283,31 @@ class _LoginScreenState extends State<LoginScreen> {
     ),
   );
 }
+
+ Route scaleIn(Widget page) {
+    return PageRouteBuilder(
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (context, animation, secondaryAnimation) => page,
+      transitionsBuilder: (context, animation, secondaryAnimation, page) {
+        var begin = 0.9;
+        var end = 1.0;
+        var curve = Curves.easeInOutBack;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        var tween2 = Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: curve));
+
+
+        return ScaleTransition(
+          scale: animation.drive(tween),
+          child: FadeTransition(
+                  opacity: animation.drive(tween2),
+                  child: page,
+                ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

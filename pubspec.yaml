@@ -8,6 +8,8 @@ environment:
 
 dependencies:
   carousel_slider: ^4.2.1
+  eventsource: ^0.4.0
+  file_picker: ^5.2.11
   flutter:
     sdk: flutter
   flutter_svg: ^2.0.5
@@ -16,6 +18,7 @@ dependencies:
   intl: ^0.18.0
   location: ^4.4.0
   provider: ^6.0.5
+  url_launcher: ^6.1.10
 
 dev_dependencies:
   flutter_test:
@@ -45,6 +48,7 @@ flutter:
   - assets/icon/money-bag.png
   - assets/icon/credit-card.png
   - assets/icon/piggy-bank.png
+  - assets/images/background_app.png
 
 flutter_icons:
   android: "launcher_icon"

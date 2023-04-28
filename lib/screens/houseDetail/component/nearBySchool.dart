@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zeehome/model/nearByPlace.dart';
-import 'package:zeehome/network/near_by_request.dart';
+import 'package:zeehome/network/map/near_by_request.dart';
 
 class NearBySchoolComponent extends StatefulWidget {
 

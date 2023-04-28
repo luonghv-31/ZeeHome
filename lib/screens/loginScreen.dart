@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:zeehome/model/auth.dart';
 import 'package:zeehome/model/authProvider.dart';
 import 'package:zeehome/model/userProvider.dart';
-import 'package:zeehome/network/auth_request.dart';
-import 'package:zeehome/network/user_request.dart';
+import 'package:zeehome/network/auth/auth_request.dart';
+import 'package:zeehome/network/user/user_request.dart';
 
 import 'package:zeehome/screens/home/homeScreen.dart';
 

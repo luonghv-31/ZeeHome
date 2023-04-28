@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:zeehome/model/userProvider.dart';
+import 'package:zeehome/screens/payment/paymentMethod/bankingScreen.dart';
+import 'package:zeehome/screens/payment/paymentMethod/vnpayScreen.dart';
 import 'package:zeehome/utils/constants.dart';
 
 class PaymentScreen extends StatelessWidget {
@@ -39,7 +41,7 @@ class PaymentScreen extends StatelessWidget {
                     height: size.height * 0.25 - 27,
                     decoration: const BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage('assets/images/background2.jpg'),
+                        image: AssetImage('assets/images/background_app.png'),
                         fit: BoxFit.cover,
                         colorFilter: ColorFilter.mode(
                           Color.fromARGB(255, 255, 255, 255),
@@ -154,6 +156,7 @@ class PaymentScreen extends StatelessWidget {
                                 child: ElevatedButton(
                                   style: raisedButtonStyle,
                                   onPressed: () {
+                                    Navigator.of(context).push(scaleInTransition(const BankingScreen()));
                                   },
                                   child: const Icon(
                                     Icons.savings,
@@ -180,6 +183,7 @@ class PaymentScreen extends StatelessWidget {
                                 child: ElevatedButton(
                                   style: raisedButtonStyle,
                                   onPressed: () {
+                                    Navigator.of(context).push(scaleInTransition(const VnpayScreen()));
                                   },
                                   child: const Icon(
                                     color: Colors.pink,

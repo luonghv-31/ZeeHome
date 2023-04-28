@@ -4,8 +4,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:zeehome/model/houses/house.dart';
 import 'package:zeehome/model/houses/houseList.dart';
 import 'package:zeehome/model/houses/parameter.dart';
-import 'package:zeehome/network/house_detail_request.dart';
-import 'package:zeehome/network/house_list_request.dart';
+import 'package:zeehome/network/house/house_detail_request.dart';
+import 'package:zeehome/network/house/house_list_request.dart';
 import 'package:zeehome/screens/houseDetail/houseDetailScreen.dart';
 
 class MapScreen extends StatefulWidget {

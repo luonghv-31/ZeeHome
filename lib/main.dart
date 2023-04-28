@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zeehome/model/authProvider.dart';
 import 'package:zeehome/model/userProvider.dart';
 import 'package:zeehome/utils/theme.dart';
-import 'screens/loginScreen.dart';
+import 'screens/login/loginScreen.dart';
 import 'package:provider/provider.dart';
 
 void main() {

@@ -42,3 +42,28 @@ const Color secondaryColor10LightTheme = Color(0xFFEEEEEE);
 const Color secondaryColor5LightTheme = Color(0xFFF8F8F8);
 
 const defaultPadding = 16.0;
+
+Route scaleInTransition(Widget page) {
+  return PageRouteBuilder(
+    transitionDuration: const Duration(milliseconds: 300),
+    pageBuilder: (context, animation, secondaryAnimation) => page,
+    transitionsBuilder: (context, animation, secondaryAnimation, page) {
+      var begin = 0.9;
+      var end = 1.0;
+      var curve = Curves.easeInOutBack;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      var tween2 = Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: curve));
+
+
+      return ScaleTransition(
+        scale: animation.drive(tween),
+        child: FadeTransition(
+          opacity: animation.drive(tween2),
+          child: page,
+        ),
+      );
+    },
+  );
+}

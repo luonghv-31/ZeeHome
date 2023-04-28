@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:zeehome/components/locationListTitle.dart';
 import 'package:zeehome/model/autocomplete/placeAutoCompleteResponse.dart';
-import 'package:zeehome/network/place_request.dart';
+import 'package:zeehome/network/map/place_request.dart';
 import 'package:zeehome/utils/constants.dart';
 import 'package:zeehome/model/autocomplete/autoCompletePrediction.dart';
 import 'dart:async';

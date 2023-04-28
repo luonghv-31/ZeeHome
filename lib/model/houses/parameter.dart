@@ -34,15 +34,15 @@ class HouseListParameter {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['queryFor'] = this.queryFor;
-    data['queryType'] = this.queryType;
-    data['distance'] = this.distance;
-    data['polygonPoints'] = this.polygonPoints;
-    data['mapPoint'] = this.mapPoint;
-    data['showInvisible'] = this.showInvisible;
-    data['pageSize'] = this.pageSize;
-    data['pageNumber'] = this.pageNumber;
-    data['houseType'] = this.houseType;
+    data['queryFor'] = this.queryFor?.toString();
+    data['queryType'] = this.queryType?.toString();
+    data['distance'] = this.distance?.toString();
+    // polygonPoints != null ? data['polygonPoints'] = this.polygonPoints?.toString() : '';
+    data['mapPoint'] = this.mapPoint?.toString();
+    data['showInvisible'] = this.showInvisible?.toString();
+    data['pageSize'] = this.pageSize?.toString();
+    data['pageNumber'] = this.pageNumber?.toString();
+    data['houseType'] = this.houseType?.toString();
     return data;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zeehome/model/user.dart';
 
 class UserProvider with ChangeNotifier {
   String _gender = '';
@@ -41,4 +42,30 @@ class UserProvider with ChangeNotifier {
   String get email => _email;
 
   String get image => _image;
+
+  String get firstName => _firstName;
+
+  String get lastName => _lastName;
+
+  double get balance => _balance;
+
+  User getUserObj () {
+    return User(
+      gender: _gender,
+      phoneNumber: _phoneNumber,
+      intro: _intro,
+      image: image,
+      birthDate: _birthDate,
+      firstName: _firstName,
+      lastName: _lastName,
+      email: _email,
+      registerAt: _registerAt,
+      banned: _banned,
+      avgRating: _avgRating,
+      title: _title,
+      role: _role,
+      userId: _userId,
+      balance: _balance,
+    );
+  }
 }

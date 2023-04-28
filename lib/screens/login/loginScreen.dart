@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:zeehome/model/auth.dart';
 import 'package:zeehome/model/authProvider.dart';
 import 'package:zeehome/model/userProvider.dart';
-import 'package:zeehome/network/auth_request.dart';
-import 'package:zeehome/network/user_request.dart';
+import 'package:zeehome/network/auth/auth_request.dart';
+import 'package:zeehome/network/user/user_request.dart';
 import 'package:zeehome/screens/home/homeScreen.dart';
 import 'package:zeehome/screens/login/signUpScreen.dart';
 import 'package:zeehome/screens/login/forgotPassScreen.dart';
@@ -72,12 +72,12 @@ class _LoginScreenState extends State<LoginScreen> {
         Container(
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
-              ]),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
+            ]),
           height: 60,
           // ignore: prefer_const_constructors
           child: TextField(
@@ -85,14 +85,14 @@ class _LoginScreenState extends State<LoginScreen> {
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(color: Colors.black87),
             decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14),
-                prefixIcon: Icon(
-                  Icons.account_circle_outlined,
-                  color: Color(0xff5ac18e),
-                ),
-                hintText: 'Nhập email của bạn',
-                hintStyle: TextStyle(color: Colors.black38)),
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.only(top: 14),
+              prefixIcon: Icon(
+                Icons.account_circle_outlined,
+                color: Color(0xff5ac18e),
+              ),
+              hintText: 'Nhập email của bạn',
+              hintStyle: TextStyle(color: Colors.black38)),
           ),
         ),
         Visibility(

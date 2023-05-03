@@ -7,6 +7,18 @@ class HouseListParameter {
   bool? showInvisible;
   int? pageSize;
   int? pageNumber;
+
+  int? roomGte;
+  int? bedRoomGte;
+  int? bathRoomGte;
+  double? priceFrom;
+  double? priceTo;
+  bool? hasAc;
+  bool? hasParking;
+  bool? hasElevator;
+  bool? hasFurnished;
+  bool? allowPet;
+  int? houseCategory;
   int? houseType;
 
   HouseListParameter(
@@ -18,7 +30,8 @@ class HouseListParameter {
         this.showInvisible,
         this.pageSize,
         this.pageNumber,
-        this.houseType,});
+        this.houseType,
+      });
 
   HouseListParameter.fromJson(Map<String, dynamic> json) {
     queryFor = json['queryFor'];
@@ -30,6 +43,18 @@ class HouseListParameter {
     pageSize = json['pageSize'];
     pageNumber = json['pageNumber'];
     houseType = json['houseType'];
+
+    roomGte = json['roomGte'];
+    bedRoomGte = json['bedRoomGte'];
+    bathRoomGte = json['bathRoomGte'];
+    priceFrom = json['priceFrom'];
+    priceTo = json['priceTo'];
+    hasAc = json['hasAc'];
+    hasParking = json['hasParking'];
+    hasElevator = json['hasElevator'];
+    hasFurnished = json['hasFurnished'];
+    allowPet = json['allowPet'];
+    houseCategory = json['houseCategory'];
   }
 
   Map<String, dynamic> toJson() {
@@ -43,6 +68,19 @@ class HouseListParameter {
     data['pageSize'] = this.pageSize?.toString();
     data['pageNumber'] = this.pageNumber?.toString();
     data['houseType'] = this.houseType?.toString();
+
+    data['roomGte'] = this.roomGte;
+    data['bedRoomGte'] = this.bedRoomGte;
+    data['bathRoomGte'] = this.bathRoomGte;
+    data['priceFrom'] = this.priceFrom;
+    data['priceTo'] = this.priceTo;
+    data['hasAc'] = this.hasAc;
+    data['hasParking'] = this.hasParking;
+    data['hasElevator'] = this.hasElevator;
+    data['hasFurnished'] = this.hasFurnished;
+    data['allowPet'] = this.allowPet;
+    data['houseCategory'] = this.houseCategory;
+
     return data;
   }
 }

@@ -1,13 +1,8 @@
 import 'dart:convert';
-import 'dart:ffi';
-
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-
-
-
 const String url = 'https://huydt.online/api/auth/signup';
- 
 
 class SignUpRequest {
   static createAcount(
@@ -44,9 +39,14 @@ class SignUpRequest {
       },
        body: jsonEncode(data),
        encoding: Encoding.getByName('utf-8')
+    ).timeout(
+      const Duration(seconds: 10),
+      onTimeout: () {
+        debugPrint('timeOut');
+        throw Exception('Some error happen'); // Request Timeout response status code
+      },
     );
-    print(response.statusCode);
+    debugPrint(response.statusCode.toString());
     return response;
-    
   }
 }

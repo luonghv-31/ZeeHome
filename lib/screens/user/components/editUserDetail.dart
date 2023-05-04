@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:zeehome/model/user.dart';
 import 'package:intl/intl.dart';
+import 'package:zeehome/model/userProvider.dart';
 import 'package:zeehome/network/uploadFile_request.dart';
-import 'package:zeehome/utils/constants.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:zeehome/network/user/edit_user_request.dart';
 
 class EditUserDetail extends StatefulWidget {
   final User user;
@@ -11,7 +16,8 @@ class EditUserDetail extends StatefulWidget {
   final Size size;
   final f = DateFormat('dd-MM-yyyy');
   final inputFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-  EditUserDetail({Key? key, required this.user, required this.size, required this.access_token}) : super(key: key);
+  Function(String firstName, String lastName, String birthDate, String gender, String intro, String image, String phoneNumber) updateUser;
+  EditUserDetail({Key? key, required this.user, required this.size, required this.access_token, required this.updateUser}) : super(key: key);
 
   @override
   State<EditUserDetail> createState() => _EditUserDetailState();
@@ -55,6 +61,16 @@ class _EditUserDetailState extends State<EditUserDetail> {
     super.initState();
   }
 
+  void myValueSetter(int progress) {
+    EasyLoading.showProgress((progress / 100), status: 'Đang tải ảnh lên: $progress%');
+  }
+
+  void setImageKey(String imageKey) {
+    EasyLoading.dismiss();
+    setState(() {
+      image.text = imageKey;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,13 +125,13 @@ class _EditUserDetailState extends State<EditUserDetail> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SizedBox(height: 16),
+                              const SizedBox(height: 16),
                               CircleAvatar(
-                                radius: 30,
+                                radius: 40,
                                 backgroundColor: Colors.brown.shade800,
                                 backgroundImage: NetworkImage(image.text),
-                                child: Text('AH'),
                               ),
+                              const SizedBox(height: 8,),
                               ElevatedButton(
                                 onPressed: () async {
                                   var picked = await FilePicker.platform.pickFiles(
@@ -123,12 +139,15 @@ class _EditUserDetailState extends State<EditUserDetail> {
                                   );
 
                                   if (picked != null) {
-                                    print(picked.files.first.name);
+                                    UploadFileRequest.fetchUploadFile(widget.access_token, 'image', picked.files.first, myValueSetter, setImageKey).then((value) => {
+
+                                    });
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
                                   elevation: 0,
                                   minimumSize: const Size(100, 36),
+                                  maximumSize: const Size(200, 36),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(4.0),
                                   ),
@@ -138,7 +157,10 @@ class _EditUserDetailState extends State<EditUserDetail> {
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                child: Text('Thay đổi avatar'),
+                                child: Container(
+                                    padding: const EdgeInsets.only(top: 8, bottom: 8),
+                                    child: const Text('Thay đổi avatar'),
+                                ),
                               )
                             ],
                           ),
@@ -149,7 +171,6 @@ class _EditUserDetailState extends State<EditUserDetail> {
                               const Text('Họ:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
                               TextFormField(
                                 controller: firstName,
-                                keyboardType: TextInputType.number,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
                                     return 'Điền đầy đủ thông tin';
@@ -183,6 +204,24 @@ class _EditUserDetailState extends State<EditUserDetail> {
                               const Text('Mô tả: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
                               TextFormField(
                                 controller: intro,
+                                // The validator receives the text that the user has entered.
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Điền đầy đủ thông tin';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text('Số điện thoại: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+                              TextFormField(
+                                keyboardType: TextInputType.number,
+                                controller: phoneNumber,
                                 // The validator receives the text that the user has entered.
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -267,38 +306,42 @@ class _EditUserDetailState extends State<EditUserDetail> {
                               )
                             ],
                           ),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: 40),
                           ElevatedButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Đang xử lý')),
-                                );
-                              }
-                              // showDialog<String>(
-                              //   context: context,
-                              //   builder: (BuildContext context) => AlertDialog(
-                              //     title: const Text('Thông báo'),
-                              //     content: Container(
-                              //       child: Column(
-                              //         crossAxisAlignment: CrossAxisAlignment.stretch,
-                              //         mainAxisSize: MainAxisSize.min,
-                              //         children: const [
-                              //           Text('Cập nhật thông tin thành công'),
-                              //         ],
-                              //       ),
-                              //     ),
-                              //     actions: <Widget>[
-                              //       TextButton(
-                              //         onPressed: () => Navigator.pop(context, 'Cancel'),
-                              //         child: const Text('Xác nhận'),
-                              //       ),
-                              //     ],
-                              //   ),
-                              // );
-                            },
-                            child: const Text('Cập nhật'),
-                          ),
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Đang xử lý')),
+                              );
+                              EditUserRequest.fetchEditUser(widget.access_token, firstName.text, lastName.text, inputFormat.format(f.parse(birthDate.text.toString()))
+                                  , gender!, intro.text, image.text, phoneNumber.text).then((value) => {
+                                showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) => AlertDialog(
+                                    title: const Text('Thông báo'),
+                                    content: Container(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: const [
+                                          Text('Cập nhật thông tin thành công'),
+                                        ],
+                                      ),
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context, 'Cancel'),
+                                        child: const Text('Xác nhận'),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                widget.updateUser(firstName.text, lastName.text, inputFormat.format(f.parse(birthDate.text.toString())), gender!, intro.text, image.text, phoneNumber.text),
+                              });
+                            }
+                          },
+                          child: const Text('Cập nhật'),
+                        ),
                           const SizedBox(height: 16),
                         ],
                       ),

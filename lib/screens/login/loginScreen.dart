@@ -63,18 +63,18 @@ class _LoginScreenState extends State<LoginScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
+        const Text(
           'Email',
           style: TextStyle(
               color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Container(
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                   color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
             ]),
@@ -82,9 +82,9 @@ class _LoginScreenState extends State<LoginScreen> {
           // ignore: prefer_const_constructors
           child: TextField(
             controller: emailController,
-            keyboardType: TextInputType.emailAddress,
-            style: TextStyle(color: Colors.black87),
-            decoration: InputDecoration(
+            // keyboardType: TextInputType.emailAddress,
+            style: const TextStyle(color: Colors.black87),
+            decoration: const InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14),
               prefixIcon: Icon(
@@ -114,18 +114,18 @@ class _LoginScreenState extends State<LoginScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
+        const Text(
           'Mật khẩu',
           style: TextStyle(
               color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Container(
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                     color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
               ]),
@@ -134,16 +134,16 @@ class _LoginScreenState extends State<LoginScreen> {
           child: TextField(
             controller: passwordController,
             obscureText: isShowHidePass,
-            style: TextStyle(color: Colors.black87),
+            style: const TextStyle(color: Colors.black87),
             decoration: InputDecoration(
               border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14),
-              prefixIcon: Icon(
+              contentPadding: const EdgeInsets.only(top: 14),
+              prefixIcon: const Icon(
                 Icons.lock,
                 color: Color(0xff5ac18e),
               ),
               hintText: 'Nhập mật khẩu',
-              hintStyle: TextStyle(color: Colors.black38),
+              hintStyle: const TextStyle(color: Colors.black38),
               suffixIcon: showHidePass(),
             ),
           ),
@@ -182,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       },
       icon:
-          isShowHidePass ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
+          isShowHidePass ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off),
       color: Colors.green,
     );
   }
@@ -197,7 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
         onPressed: () {
           Navigator.of(context).push(scaleIn(forgotPass()));
         },
-        child: Text(
+        child: const Text(
           'Quên mật khẩu?',
           style:
               TextStyle(color: Color(0xffCFA1E6), fontWeight: FontWeight.bold),
@@ -212,11 +212,11 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Row(
         children: <Widget>[
           Theme(
-            data: ThemeData(unselectedWidgetColor: Color(0xffCFA1E6)),
+            data: ThemeData(unselectedWidgetColor: const Color(0xffCFA1E6)),
             child: Checkbox(
               value: isRememberMe,
               checkColor: Colors.black,
-              activeColor: Color(0xffCFA1E6),
+              activeColor: const Color(0xffCFA1E6),
               onChanged: (bool? value) {
                 setState(() {
                   isRememberMe = value!;
@@ -235,7 +235,7 @@ class _LoginScreenState extends State<LoginScreen> {
               },
             ),
           ),
-          Text(
+          const Text(
             'Ghi nhớ tài khoản',
             style: TextStyle(
               color: Color(0xffCFA1E6),
@@ -251,16 +251,48 @@ class _LoginScreenState extends State<LoginScreen> {
     return Consumer2<AuthProvider, UserProvider>(
         builder: (context, authProvider, userProvider, child) {
       return Container(
-        padding: EdgeInsets.symmetric(vertical: 25),
+        padding: const EdgeInsets.symmetric(vertical: 25),
         width: 170,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
               elevation: 5,
-              padding: EdgeInsets.all(15),
+              padding: const EdgeInsets.all(15),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6)),
-              backgroundColor: Color.fromARGB(255, 0, 106, 255)),
+              backgroundColor: const Color.fromARGB(255, 0, 106, 255)),
           onPressed: () {
+            SignInRequest.fetchAuth(
+                emailController.text, passwordController.text)
+                .then((data) {
+              setState(() {
+                access_token:
+                data.access_token;
+                reresh_token:
+                data.refresh_token;
+              });
+              authProvider.setAccessToken(data.access_token);
+              GetUserRequest.fetchUser(data.access_token)
+                  .then((data) => {
+                userProvider.set(
+                    data.gender,
+                    data.phoneNumber,
+                    data.intro,
+                    data.image,
+                    data.birthDate,
+                    data.firstName,
+                    data.lastName,
+                    data.email,
+                    data.registerAt,
+                    data.banned,
+                    data.avgRating,
+                    data.title,
+                    data.role,
+                    data.userId,
+                    data.balance),
+                Navigator.of(context)
+                    .push(scaleIn(HomeScreen()))
+              });
+            });
             checkAllField(emailController.text, passwordController.text)
                 ? {
                     SignInRequest.fetchAuth(
@@ -272,9 +304,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         reresh_token:
                         data.refresh_token;
                       });
-
                       authProvider.setAccessToken(data.access_token);
-
                       GetUserRequest.fetchUser(data.access_token)
                           .then((data) => {
                                 userProvider.set(

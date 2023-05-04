@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zeehome/screens/createHouse/createHouseScreen.dart';
 import 'package:zeehome/screens/map/mapScreen.dart';
 import 'package:zeehome/screens/payment/paymentScreen.dart';
 import 'package:zeehome/screens/search/locationSearchScreen.dart';
@@ -178,7 +179,9 @@ class Features extends StatelessWidget {
                         ),
                         child: ElevatedButton(
                           style: raisedButtonStyle,
-                          onPressed: () { },
+                          onPressed: () {
+                            Navigator.of(context).push(scaleIn(const CreateHouseScreen()));
+                          },
                           child: const Icon(
                             color: Colors.pink,
                             size: 24,

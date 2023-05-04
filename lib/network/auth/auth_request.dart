@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:zeehome/model/auth.dart';
-import 'dart:developer' as developer;
 
 const String url = 'https://huydt.online/auth/realms/nhatrotot/protocol/openid-connect/token';
 
@@ -30,7 +29,7 @@ class SignInRequest {
           'client_secret': '11UJJdC8M4fx3C7YzdlD2X9ruVcC9W3j',
         },
     ).timeout(
-      const Duration(seconds: 3),
+      const Duration(seconds: 10),
       onTimeout: () {
         throw Exception('Some error happen'); // Request Timeout response status code
       },

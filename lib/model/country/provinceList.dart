@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 class Provinces {
   List<Province>? provinces;
 
@@ -43,14 +45,14 @@ class Province {
 
   factory Province.fromJson(Map<String, dynamic> json) {
     return Province(
-      name: json['name'] as String,
-      code: json['code'] as String,
-      nameEn: json['nameEn'] as String,
-      fullName: json['fullName'] as String,
-      fullNameEn: json['fullNameEn'] as String,
-      codeName: json['codeName'] as String,
-      unitTitle: json['unitTitle'] as String,
-      region: json['region'] as String,
+      name: json['name'].toString(),
+      code: json['code'].toString(),
+      nameEn: json['nameEn'].toString(),
+      fullName: json['fullName'].toString(),
+      fullNameEn: json['fullNameEn'].toString(),
+      codeName: json['codeName'].toString(),
+      unitTitle: json['unitTitle'].toString(),
+      region: json['region'].toString(),
     );
   }
 

@@ -13,11 +13,15 @@ class EditUserDetailScreen extends StatefulWidget {
 }
 
 class _EditUserDetailScreenState extends State<EditUserDetailScreen> {
+  updateUserCallback() {
+
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Consumer2<UserProvider, AuthProvider>(builder: (context, userProvider, authProvider ,child){
-      return Scaffold(
+        return Scaffold(
         body: AnnotatedRegion<SystemUiOverlayStyle>(
           value: SystemUiOverlayStyle.light,
           child: GestureDetector(
@@ -38,7 +42,7 @@ class _EditUserDetailScreenState extends State<EditUserDetailScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      EditUserDetail(user: userProvider.getUserObj(), size: size, access_token: authProvider.accessToken,)
+                      EditUserDetail(user: userProvider.getUserObj(), size: size, access_token: authProvider.accessToken, updateUser: userProvider.updateUser, )
                     ],
                   ),
                 ),

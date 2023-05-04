@@ -14,8 +14,11 @@ class HouseListRequest {
   }
 
   static Future<List<House>> fetchHouseList(HouseListParameter houseListParameter) async {
+    debugPrint(houseListParameter.toString());
     final uri = Uri.https('huydt.online', '/api/houses', houseListParameter.toJson());
     final response = await http.get(uri);
+
+    debugPrint(response.body.toString());
     if (response.statusCode == 200) {
       return compute( parseHouseList, response.body);
     } else if (response.statusCode == 404) {

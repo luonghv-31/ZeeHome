@@ -23,8 +23,6 @@ class GetUserRequest {
       },
     );
     if (response.statusCode == 200) {
-      // developer.log(response.body);
-      print(response.body);
       return compute( parseUser, response.body);
     } else if (response.statusCode == 404) {
       throw Exception('Not Found');

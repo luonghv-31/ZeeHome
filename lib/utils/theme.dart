@@ -4,6 +4,8 @@ import 'constants.dart';
 
 ThemeData lightTheme(BuildContext context) {
   return ThemeData(
+    useMaterial3: true,
+    colorSchemeSeed: const Color(0xff6750a4),
     scaffoldBackgroundColor: Colors.white,
     textTheme: const TextTheme(
       labelLarge: lableTextStyle,
@@ -41,6 +43,7 @@ ThemeData lightTheme(BuildContext context) {
     ),
     iconTheme: const IconThemeData(color: textColorLightTheme),
     dividerColor: secondaryColor5LightTheme,
+
   );
 }
 

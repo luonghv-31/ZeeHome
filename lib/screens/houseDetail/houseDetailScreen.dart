@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zeehome/model/houses/house.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:zeehome/screens/home/homeScreen.dart';
 import 'package:zeehome/screens/houseDetail/component/nearBySchool.dart';
 import 'package:zeehome/utils/constants.dart';
 
@@ -25,11 +26,6 @@ class HouseDetailScreen extends StatelessWidget {
               Text(houseDetail.address.toString()!, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w400, color: Colors.black)),
             ],
           ),
-          Row(
-            children: [
-              Text('${houseDetail.price.toString()!} vnd', style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: Colors.black)),
-            ],
-          )
         ],
       ),
     );
@@ -49,7 +45,8 @@ class HouseDetailScreen extends StatelessWidget {
                 CircleAvatar(
                   backgroundColor: Colors.brown.shade800,
                   radius: 32,
-                  child: Text('AH'),
+                  backgroundImage: NetworkImage(houseDetail!.owner!.userImage!),
+                  child: const Text('AD'),
                 ),
                 const SizedBox(width: 12),
                 Column(
@@ -61,8 +58,13 @@ class HouseDetailScreen extends StatelessWidget {
                       children: [
                         Row(
                           children: const [
-                            Text('yes', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Colors.black)),
-                            Text('Uy tín', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Colors.black)),
+                            Icon(
+                              Icons.done,
+                              size: 18,
+                              color: Color.fromARGB(255, 5, 94, 22),
+                            ),
+                            SizedBox(width: 4,),
+                            Text('Uy tín', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Color.fromARGB(255, 5, 94, 22))),
                           ],
                         ),
                         const Text('---------------', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black)),
@@ -84,7 +86,7 @@ class HouseDetailScreen extends StatelessWidget {
                 size: 24.0,
                 semanticLabel: 'Text to announce in accessibility modes',
               ),
-              label: const Text("Liên hệ"),
+              label: const Text("Gửi tin nhắn"),
               style: ElevatedButton.styleFrom(
                 backgroundColor: secondaryColor10LightTheme,
                 foregroundColor: textColorLightTheme,
@@ -239,14 +241,13 @@ class HouseDetailScreen extends StatelessWidget {
                     ),
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 130, 130, 130),
+                        color: const Color.fromARGB(255, 130, 130, 130),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Container(
                           padding: const EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 8),
                           child: (
                               Text('Phòng tắm: ${houseDetail.bathRooms != null ? houseDetail.bathRooms.toString() : '0'}', style: const TextStyle( fontWeight: FontWeight.w600, fontSize: 16, color: Colors.white ))
-
                           )
                       ),
                     ),
@@ -264,7 +265,7 @@ class HouseDetailScreen extends StatelessWidget {
                     ),
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 84, 9, 205),
+                        color: const Color.fromARGB(255, 84, 9, 205),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Container(
@@ -278,6 +279,21 @@ class HouseDetailScreen extends StatelessWidget {
               ),
             ],
           )
+        ],
+      ),
+    );
+  }
+
+  Widget buildDesctription() {
+    return Container(
+      color: Colors.white,
+      margin: const EdgeInsets.only(top: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Text('Mô tả', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500, color: Colors.black)),
+          const SizedBox(height: 6),
+          Text(houseDetail.description!.toString()),
         ],
       ),
     );
@@ -305,84 +321,158 @@ class HouseDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return DefaultTextStyle(style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w400),
-        child:
-        SingleChildScrollView(
-            child: Container(
-              color: Colors.white,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  CarouselSlider(
-                    carouselController: buttonCarouselController,
-                    options: CarouselOptions(
-                      height: 300,
-                      aspectRatio: 16/9,
-                      viewportFraction: 1,
-                      initialPage: 0,
-                      enableInfiniteScroll: false,
-                      reverse: false,
-                      autoPlay: false,
-                      autoPlayInterval: const Duration(seconds: 3),
-                      autoPlayAnimationDuration: const Duration(milliseconds: 800),
-                      autoPlayCurve: Curves.fastOutSlowIn,
-                      enlargeCenterPage: true,
-                      enlargeFactor: 0.3,
-                      scrollDirection: Axis.horizontal,
-                    ),
-                    items: houseDetail.images != null ? houseDetail.images?.map((i) {
-                      return Builder(
-                        builder: (BuildContext context) {
-                          return Container(
-                            width: MediaQuery.of(context).size.width,
-                            margin: const EdgeInsets.symmetric(horizontal: 2.0),
-                            decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(
-                                    'assets/images/background2.jpg'),
-                                fit: BoxFit.fill,
-                              ),
-                              // shape: BoxShape.circle,
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+                child: Container(
+                  color: Colors.white,
+                  child: Stack(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          CarouselSlider(
+                            carouselController: buttonCarouselController,
+                            options: CarouselOptions(
+                              height: 300,
+                              aspectRatio: 16/9,
+                              viewportFraction: 1,
+                              initialPage: 0,
+                              enableInfiniteScroll: false,
+                              reverse: false,
+                              autoPlay: false,
+                              autoPlayInterval: const Duration(seconds: 3),
+                              autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                              autoPlayCurve: Curves.fastOutSlowIn,
+                              enlargeCenterPage: true,
+                              enlargeFactor: 0.3,
+                              scrollDirection: Axis.horizontal,
                             ),
-                          );
-                        },
-                      );
-                    }).toList() : [
-                      Builder(
-                        builder: (BuildContext context) {
-                          return Container(
-                              width: MediaQuery.of(context).size.width,
-                              margin: const EdgeInsets.symmetric(horizontal: 2.0),
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                      'assets/images/background2.jpg'),
-                                  fit: BoxFit.fill,
-                                ),
+                            items: (houseDetail.images != null && houseDetail.images!.isNotEmpty) ? houseDetail.images?.map((i) {
+                              return Builder(
+                                builder: (BuildContext context) {
+                                  return Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    margin: const EdgeInsets.symmetric(horizontal: 2.0),
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: NetworkImage(i.toString()),
+                                        fit: BoxFit.fill,
+                                      ),
+                                      // shape: BoxShape.circle,
+                                    ),
+                                  );
+                                },
+                              );
+                            }).toList() : [
+                              Builder(
+                                builder: (BuildContext context) {
+                                  return Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    margin: const EdgeInsets.symmetric(horizontal: 2.0),
+                                    decoration: const BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/background2.jpg'),
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )
+                            ],
+                          ),
+                          Container(
+                            padding: const EdgeInsets.only(top: 20, bottom: 20, left: 12, right: 12),
+                            child: Column(
+                              children: [
+                                const SizedBox(height: 40),
+                                buildTitle(),
+                                buildContact(),
+                                buildDesctription(),
+                                buildFeature(),
+                                buildArround(),
+                                NearBySchoolComponent(location: '${houseDetail.latitude},${houseDetail.longitude}'),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      Align(
+                        alignment: AlignmentDirectional.topCenter,
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 300 - 27),
+                          width: 320,
+                          height: 54,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(6),
+                            boxShadow: [
+                              BoxShadow(
+                                offset: const Offset(0, 10),
+                                blurRadius: 30,
+                                color: kPrimaryColor.withOpacity(0.23),
                               ),
-                              child: const Text('text ssfsdf', style: const TextStyle(fontSize: 16.0))
-                          );
-                        },
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('${houseDetail.price} vnd', style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 26),),
+                            ],
+                          ),
+                        ),
                       )
                     ],
                   ),
-                  Container(
-                    padding: const EdgeInsets.only(top: 20, bottom: 20, left: 12, right: 12),
-                    child: Column(
-                      children: [
-                        buildTitle(),
-                        buildContact(),
-                        buildFeature(),
-                        buildArround(),
-                        NearBySchoolComponent(location: '${houseDetail.latitude},${houseDetail.longitude}'),
-                      ],
+                )
+            ),
+            Align(
+              alignment: AlignmentDirectional.topStart, // <-- SEE HERE
+              child: Container(
+                height: 68,
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 0),
+                color: Colors.transparent,
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: secondaryColor10LightTheme,
+                      child: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(
+                            Icons.keyboard_backspace,
+                            color: secondaryColor40LightTheme,
+                            size: 24.0,
+                            semanticLabel: 'Text to announce in accessibility modes',
+                          )
+                      ),
                     ),
-                  )
-                ],
+                    Spacer(),
+                    CircleAvatar(
+                      backgroundColor: secondaryColor10LightTheme,
+                      child: IconButton(
+                          onPressed: () {
+                            Navigator.of(context).push(scaleInTransition(const HomeScreen()));
+                          },
+                          icon: const Icon(
+                            Icons.home,
+                            color: secondaryColor40LightTheme,
+                            size: 24.0,
+                            semanticLabel: 'Text to announce in accessibility modes',
+                          )
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            )
+            ),
+
+          ],
         )
+
     );
   }
 }

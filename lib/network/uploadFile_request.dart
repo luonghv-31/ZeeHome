@@ -1,54 +1,53 @@
 import 'dart:io';
+
 import 'package:eventsource/eventsource.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart' as http;
+
 const String progressUrl = 'http://103.162.20.167/api/progress';
 const String postFileUrl = 'https://huydt.online/api/file/';
 
 class UploadFileRequest {
 
-  static Future<String> fetchUploadFile(String access_token, String fileType, File file) async {
+  static Future<void> fetchUploadFile(String access_token, String fileType, PlatformFile file, final ValueSetter<int> myValueSetter, final ValueSetter<String> getImageKey) async {
     EventSource eventSource = await EventSource.connect(progressUrl, headers: {
       'Authorization': 'Bearer $access_token',
     });
 
-    eventSource.listen((event) {
-      if(event.event == 'GUID') {
-        final GUID = event.data;
-        var formData = new Map<String, dynamic>();
+    debugPrint('start uploading');
 
+    eventSource.listen((event) async {
+      if(event.event == 'GUID') {
+        myValueSetter(0);
+        final GUID = event.data;
+        debugPrint(GUID);
+
+
+        var request = http.MultipartRequest("POST", Uri.parse(postFileUrl));
+        request.headers.addAll({
+          "Accept": "application/json",
+          "Authorization": "Bearer $access_token",
+        });
+        request.fields['file_type'] = 'image';
+        request.fields['GUID'] = GUID!;
+        request.files.add( await http.MultipartFile.fromPath('file', file.path! ));
+
+        final responseStream = await request.send();
+
+        final response = await http.Response.fromStream(responseStream);
+
+        debugPrint(response.body.toString());
+        getImageKey(response.body.toString());
+      }
+      if(event.event == 'progress') {
+        debugPrint(event.data);
+        myValueSetter(int.parse(event.data!));
+      }
+      if(event.event == 'complete') {
+        myValueSetter(100);
       }
     });
-
-    // var _client = http.Client();
-    // Map<String, String> headers = { 'Authorization': 'Bearer $access_token' };
-    //
-    // final req = http.Request('GET', Uri.parse(progressUrl));
-    // req.headers.addAll(headers);
-    // final res = await _client.send(req);
-    //
-    // res.stream.toStringStream().listen((value) {
-    //   debugPrint(jsonDecode(value));
-    // });
-
-    // final response = await http.post(
-    //   Uri.parse(url),
-    //   body: jsonEncode({
-    //     'amount': amount,
-    //     'orderAttachment': orderAttachment
-    //   }),
-    //   headers: <String, String> {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': 'Bearer $access_token',
-    //   },
-    // );
-    // if (response.statusCode == 200) {
-    //   return response.body.toString();
-    // } else if (response.statusCode == 404) {
-    //   throw Exception('Not Found');
-    // } else if (response.statusCode == 401) {
-    //   throw Exception('unauthorized');
-    // } else {
-    //   throw Exception('Can\'t not get posts');
-    // }
-    return 'this';
   }
+
 }

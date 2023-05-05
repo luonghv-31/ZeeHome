@@ -84,7 +84,7 @@ class MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Track order"),
+        title: const Text("Bản đồ"),
       ),
       body: GoogleMap(
         initialCameraPosition: const CameraPosition(

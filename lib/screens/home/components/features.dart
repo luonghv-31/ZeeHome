@@ -4,6 +4,7 @@ import 'package:zeehome/screens/map/mapScreen.dart';
 import 'package:zeehome/screens/payment/paymentScreen.dart';
 import 'package:zeehome/screens/search/locationSearchScreen.dart';
 import 'package:zeehome/screens/user/userDetailScreen.dart';
+import 'package:zeehome/screens/chat/chatScreen.dart';
 
 class Features extends StatelessWidget {
   Features({
@@ -107,7 +108,7 @@ class Features extends StatelessWidget {
                             color: Colors.pink,
                             size: 24,
                             semanticLabel: 'Text to announce in accessibility modes',
-                            Icons.maps_home_work_outlined,
+                            Icons.attach_money_outlined,
                           ),
                         ),
                       ),
@@ -213,13 +214,41 @@ class Features extends StatelessWidget {
                             color: Colors.pink,
                             size: 24,
                             semanticLabel: 'Text to announce in accessibility modes',
-                            Icons.library_add,
+                            Icons.search,
                           ),
                         ),
 
                       ),
                       const SizedBox(height: 10),
                       const Text('Tìm kiếm', style: TextStyle(fontSize: 14, color: Color.fromARGB(255, 0, 72, 230), fontWeight: FontWeight.w600)),
+                    ],
+                  ),
+                ),
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: const Color.fromARGB(255, 230, 230, 230)),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ElevatedButton(
+                          style: raisedButtonStyle,
+                          onPressed: () {
+                            Navigator.of(context).push(scaleIn( ChatScreen()));
+                          },
+                          child: const Icon(
+                            color: Colors.pink,
+                            size: 24,
+                            semanticLabel: 'Text to announce in accessibility modes',
+                            Icons.message_outlined,
+                          ),
+                        ),
+
+                      ),
+                      const SizedBox(height: 10),
+                      const Text('Tin nhắn', style: TextStyle(fontSize: 14, color: Color.fromARGB(255, 0, 72, 230), fontWeight: FontWeight.w600)),
                     ],
                   ),
                 ),

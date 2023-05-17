@@ -79,7 +79,7 @@ class _VnpayScreenState extends State<VnpayScreen> {
                           });
                         }
                       },
-                      child: const Text('Tiếp tục'),
+                      child: const Text('Tiếp tục', style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 ),
@@ -123,18 +123,11 @@ class _VnpayScreenState extends State<VnpayScreen> {
                         Row(
                           children: [
                             IconButton(
-                                icon: const Icon(Icons.keyboard_backspace, color: Colors.white, size: 28,),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                style: IconButton.styleFrom(
-                                  foregroundColor: Colors.red,
-                                  backgroundColor: Colors.red,
-                                  disabledBackgroundColor: Colors.red.withOpacity(0.12),
-                                  hoverColor: Colors.red.withOpacity(0.08),
-                                  focusColor: Colors.red.withOpacity(0.12),
-                                  highlightColor: Colors.red.withOpacity(0.12),
-                                )),
+                              icon: const Icon(Icons.keyboard_backspace, color: Colors.white, size: 28,),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
                             const SizedBox(width: 16,),
                             const Text('Nạp tiền phương thức Vnpay', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),),
                           ],

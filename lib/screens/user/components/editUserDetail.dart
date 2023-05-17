@@ -92,14 +92,7 @@ class _EditUserDetailState extends State<EditUserDetail> {
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              style: IconButton.styleFrom(
-                                foregroundColor: Colors.red,
-                                backgroundColor: Colors.red,
-                                disabledBackgroundColor: Colors.red.withOpacity(0.12),
-                                hoverColor: Colors.red.withOpacity(0.08),
-                                focusColor: Colors.red.withOpacity(0.12),
-                                highlightColor: Colors.red.withOpacity(0.12),
-                              )),
+                             ),
                           const SizedBox(width: 16,),
                           const Text('Chỉnh sửa thông tin cá nhân', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),),
                         ],
@@ -159,7 +152,7 @@ class _EditUserDetailState extends State<EditUserDetail> {
                                 ),
                                 child: Container(
                                     padding: const EdgeInsets.only(top: 8, bottom: 8),
-                                    child: const Text('Thay đổi avatar'),
+                                    child: const Text('Thay đổi avatar', style: TextStyle(color: Colors.white)),
                                 ),
                               )
                             ],
@@ -340,7 +333,7 @@ class _EditUserDetailState extends State<EditUserDetail> {
                               });
                             }
                           },
-                          child: const Text('Cập nhật'),
+                          child: const Text('Cập nhật', style: TextStyle(color: Colors.white)),
                         ),
                           const SizedBox(height: 16),
                         ],

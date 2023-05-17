@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:zeehome/model/userProvider.dart';
+import 'package:zeehome/screens/search/locationSearchScreen.dart';
 import 'package:zeehome/utils/constants.dart';
 
 class HeaderWithSearchBox extends StatelessWidget {
@@ -16,21 +16,21 @@ class HeaderWithSearchBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<UserProvider>(builder: (context, userProvider, child) {
       return  Container(
-        margin: const EdgeInsets.only(bottom: kDefaultPadding * 2.5),
+        margin: const EdgeInsets.only(bottom: kDefaultPadding - 16),
         // It will cover 20% of our total height
-        height: size.height * 0.25,
+        height: size.height * 0.32,
         child: Stack(
           children: <Widget>[
-            Container(
+            Container (
               padding: const EdgeInsets.only(
                 left: kDefaultPadding,
                 right: kDefaultPadding,
-                bottom: 36 + kDefaultPadding,
+                bottom: 30 + kDefaultPadding,
               ),
               height: size.height * 0.25 - 27,
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/images/background2.jpg'),
+                  image: AssetImage('assets/images/background_app.png'),
                   fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
                     Color.fromARGB(255, 255, 255, 255),
@@ -46,18 +46,18 @@ class HeaderWithSearchBox extends StatelessWidget {
                 children: <Widget>[
                   Container(
                     margin: const EdgeInsets.only(top: 40.0),
-                    width: 80.0,
-                    height: 80.0,
+                    width: 60.0,
+                    height: 60.0,
                     decoration: BoxDecoration(
                       color: const Color.fromARGB(0, 255, 255, 255),
                       image: DecorationImage(
                         image: NetworkImage(userProvider.image),
                         fit: BoxFit.cover,
                       ),
-                      borderRadius: const BorderRadius.all( Radius.circular(50.0)),
+                      borderRadius: const BorderRadius.all(Radius.circular(50.0)),
                       border: Border.all(
                         color: Colors.white,
-                        width: 4.0,
+                        width: 2.0,
                       ),
                     ),
                   ),
@@ -68,18 +68,16 @@ class HeaderWithSearchBox extends StatelessWidget {
                       children: [
                         Text(
                           userProvider.name,
-                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 20),
+                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 20),
                         ),
                         Text(
                           userProvider.email,
-                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 20),
+                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 16),
                         ),
                       ],
                     ),
                   ),
-
                   const Spacer(),
-                  // Image.asset("assets/logo.png")
                 ],
               ),
             ),
@@ -91,9 +89,8 @@ class HeaderWithSearchBox extends StatelessWidget {
                 alignment: Alignment.center,
                 margin: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
                 padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                height: 54,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Colors.transparent,
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
@@ -103,26 +100,46 @@ class HeaderWithSearchBox extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: TextField(
-                        onChanged: (value) {},
-                        decoration: InputDecoration(
-                          hintText: "Search",
-                          hintStyle: TextStyle(
-                            color: kPrimaryColor.withOpacity(0.5),
-                          ),
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          // surffix isn't working properly  with SVG
-                          // thats why we use row
-                          // suffixIcon: SvgPicture.asset("assets/icons/search.svg"),
-                        ),
-                      ),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
                     ),
-                    SvgPicture.asset("assets/icon/search.svg"),
-                  ],
+                    minimumSize: const Size(400, 120),
+                    maximumSize: const Size(400, 120),
+                    backgroundColor: Colors.white,
+                    textStyle: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(scaleInTransition( const  SearchLocationScreen()));
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('Tìm kiếm', style: TextStyle(color: Colors.black, fontSize: 20)),
+                      Row(
+                        children: [
+                          const Spacer(),
+                          Container(
+                            width: 68,
+                            height: 68,
+                            alignment: Alignment.center,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                  image: AssetImage('assets/images/search.png'),
+                                  fit: BoxFit.fill
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

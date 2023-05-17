@@ -23,7 +23,7 @@ class GetUserRequest {
       },
     );
     if (response.statusCode == 200) {
-      return compute( parseUser, response.body);
+      return compute( parseUser, utf8.decode(response.bodyBytes));
     } else if (response.statusCode == 404) {
       throw Exception('Not Found');
     } else if (response.statusCode == 401) {

@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:zeehome/components/locationListTitle.dart';
 import 'package:zeehome/model/autocomplete/placeAutoCompleteResponse.dart';
+import 'package:zeehome/model/houses/parameter.dart';
 import 'package:zeehome/network/map/place_request.dart';
+import 'package:zeehome/screens/map/mapScreen.dart';
 import 'package:zeehome/utils/constants.dart';
 import 'package:zeehome/model/autocomplete/autoCompletePrediction.dart';
 import 'dart:async';
@@ -19,7 +21,7 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
   List<AutocompletePrediction> placePredictions = [];
   Timer? _debounce;
   String? queryType;
-  double? distance;
+  String? distance = '10';
   String? queryFor;
   String? polygonPoints;
   String? mapPoint;
@@ -38,6 +40,7 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
   bool hasFurnished = false;
   bool allowPet = false;
   String? houseCategory;
+  String? location;
 
   List<Map<String, String>> priceOptions = [
     {
@@ -64,6 +67,49 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
       'value': '1000000000',
       'label': '1 tỷ'
     }
+  ];
+
+  List<Map<String, String>> distanceOptions = [
+    {
+      'value': '1',
+      'label': '1km',
+    },
+    {
+      'value': '2',
+      'label': '2km',
+    },
+    {
+      'value': '3',
+      'label': '3km',
+    },
+    {
+      'value': '4',
+      'label': '4km',
+    },
+    {
+      'value': '5',
+      'label': '5km',
+    },
+    {
+      'value': '6',
+      'label': '6km',
+    },
+    {
+      'value': '7',
+      'label': '7km',
+    },
+    {
+      'value': '8',
+      'label': '8km',
+    },
+    {
+      'value': '9',
+      'label': '9km',
+    },
+    {
+      'value': '10',
+      'label': '10km',
+    },
   ];
 
   List<Map<String, String>> countOptions = [
@@ -370,6 +416,39 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
                   );
                 }).toList(),
               ),
+
+              const SizedBox(height: 8,),
+              const Text('Bán kính: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+              DropdownButtonFormField(
+                value: distance,
+                isExpanded: true,
+                onChanged: (value) {
+                  setState(() {
+                    distance = value;
+                  });
+                },
+                onSaved: (value) {
+                  setState(() {
+                    distance = value;
+                  });
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Điền đầy đủ thông tin";
+                  } else {
+                    return null;
+                  }
+                },
+                items: distanceOptions
+                    .map((e) {
+                  return DropdownMenuItem(
+                    value: e['value'],
+                    child: Text(
+                      e['label'].toString(),
+                    ),
+                  );
+                }).toList(),
+              ),
               const SizedBox(height: 12,),
             ],
           ),
@@ -386,16 +465,36 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        leading: const Padding(
+        leading: Padding(
           padding: EdgeInsets.only(left: defaultPadding),
           child: CircleAvatar(
             backgroundColor: secondaryColor10LightTheme,
-            child: Icon(
-              Icons.near_me,
-              color: secondaryColor40LightTheme,
-              size: 24.0,
-              semanticLabel: 'Text to announce in accessibility modes',
-            ),
+            child: IconButton(
+              onPressed: () {
+                final HouseListParameter houseListParams = HouseListParameter(
+                  queryFor: 'map',
+                  queryType: 'distance',
+                  distance: double.parse(distance ?? '10'),
+                  polygonPoints: null,
+                  mapPoint: location ?? '105.804817,21.028511',
+                  showInvisible: false,
+                  pageSize: 5,
+                  pageNumber: 0,
+                  houseType: houseType != null ? int.parse(houseType!) : null,
+                  houseCategory: houseCategory != null ? int.parse(houseCategory!) : null,
+                  roomGte: roomGte != null ? int.parse(roomGte!) : null,
+                  bathRoomGte: bathRoomGte != null ? int.parse(bathRoomGte!) : null,
+                  bedRoomGte: bedRoomGte != null ? int.parse(bedRoomGte!) : null,
+                );
+                Navigator.of(context).push(scaleInTransition(MapScreen(houseListParameter: houseListParams)));
+              },
+              icon: const Icon(
+                Icons.near_me,
+                color: secondaryColor40LightTheme,
+                size: 24.0,
+                semanticLabel: 'Text to announce in accessibility modes',
+              ),
+            )
           ),
         ),
         title: const Text(
@@ -488,7 +587,9 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
                   child: ListView.builder(
                     itemCount: placePredictions.length,
                     itemBuilder: (context, index) =>  LocationListTile(
-                      press: () {},
+                      press: () {
+                        // debugPrint(placePredictions[index]);
+                      },
                       location: placePredictions[index].description!,
                     )
                   ),

@@ -31,6 +31,17 @@ class HouseListParameter {
         this.pageSize,
         this.pageNumber,
         this.houseType,
+        this.houseCategory,
+        this.roomGte,
+        this.bedRoomGte,
+        this.bathRoomGte,
+        this.priceFrom,
+        this.priceTo,
+        this.hasAc,
+        this.hasParking,
+        this.hasElevator,
+        this.hasFurnished,
+        this.allowPet,
       });
 
   HouseListParameter.fromJson(Map<String, dynamic> json) {

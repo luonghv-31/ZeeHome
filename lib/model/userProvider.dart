@@ -49,6 +49,8 @@ class UserProvider with ChangeNotifier {
 
   double get balance => _balance;
 
+  String get userId => _userId;
+
   void updateUser(String firstName, String lastName, String birthDate, String gender, String intro, String image, String phoneNumber) {
     _gender = gender;
     _phoneNumber = phoneNumber;

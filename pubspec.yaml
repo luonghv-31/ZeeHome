@@ -25,6 +25,7 @@ dependencies:
   email_validator: ^2.1.17
   flutter_easyloading: ^3.0.5
   dotted_border: ^2.0.0+3
+  infinite_scroll_pagination: ^3.2.0
 
 dev_dependencies:
   flutter_test:
@@ -58,6 +59,12 @@ flutter:
   - assets/icon/credit-card.png
   - assets/icon/piggy-bank.png
   - assets/images/background_app.png
+  - assets/images/search.png
+  - assets/images/user.png
+  - assets/images/houseList.png
+  - assets/images/createHouse.png
+  - assets/images/payment.png
+  - assets/images/chat.png
 
 flutter_icons:
   android: "launcher_icon"

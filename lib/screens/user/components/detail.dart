@@ -77,10 +77,10 @@ class UserDetail extends StatelessWidget {
                         height: 60.0,
                         decoration: BoxDecoration(
                           color: const Color.fromARGB(0, 255, 255, 255),
-                          image: DecorationImage(
-                            image: NetworkImage(user.image),
-                            fit: BoxFit.cover,
-                          ),
+                          // image: DecorationImage(
+                          //   image: NetworkImage(user.image),
+                          //   fit: BoxFit.cover,
+                          // ),
                           borderRadius: const BorderRadius.all( Radius.circular(50.0)),
                           border: Border.all(
                             color: Colors.white,

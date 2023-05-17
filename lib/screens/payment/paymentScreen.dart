@@ -55,7 +55,6 @@ class PaymentScreen extends StatelessWidget {
                     ),
                     child: Row(
                       children: <Widget>[
-
                         Container(
                           margin: const EdgeInsets.only(top: 46.0, left: 8.0),
                           child: Column(
@@ -63,11 +62,11 @@ class PaymentScreen extends StatelessWidget {
                             children: [
                               Text(
                                 '${userProvider.firstName} ${userProvider.lastName}',
-                                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 20),
+                                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 20),
                               ),
                               Text(
                                 userProvider.email,
-                                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 20),
+                                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 16),
                               ),
                             ],
                           ),
@@ -77,17 +76,13 @@ class PaymentScreen extends StatelessWidget {
                           margin: const EdgeInsets.only(top: 40.0),
                           width: 60.0,
                           height: 60.0,
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(0, 255, 255, 255),
-                            image: DecorationImage(
-                              image: NetworkImage(userProvider.image),
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius: const BorderRadius.all( Radius.circular(50.0)),
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 4.0,
-                            ),
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all( Radius.circular(50.0)),
+                          ),
+                          child: const Icon(
+                            Icons.person,
+                            size: 30,
                           ),
                         ),
                         // Image.asset("assets/logo.png")
@@ -138,7 +133,9 @@ class PaymentScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget> [
-                  Text('Chọn phương thức nạp tiền'),
+                  const SizedBox(height: 32,),
+                  const Text('Chọn phương thức nạp tiền', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+                  const SizedBox(height: 16,),
                   GridView.count(
                       shrinkWrap: true,
                       childAspectRatio: (1 / 1.1),

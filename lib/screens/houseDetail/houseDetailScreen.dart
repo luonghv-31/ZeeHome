@@ -431,7 +431,7 @@ class HouseDetailScreen extends StatelessWidget {
             Align(
               alignment: AlignmentDirectional.topStart, // <-- SEE HERE
               child: Container(
-                height: 68,
+                height: 130,
                 padding: const EdgeInsets.only(left: 20, right: 20, top: 0),
                 color: Colors.transparent,
                 child: Row(

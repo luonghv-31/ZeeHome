@@ -5,7 +5,11 @@ import 'package:zeehome/screens/map/mapScreen.dart';
 import 'package:zeehome/screens/payment/paymentScreen.dart';
 import 'package:zeehome/screens/search/locationSearchScreen.dart';
 import 'package:zeehome/screens/user/userDetailScreen.dart';
+<<<<<<< HEAD
 import 'package:zeehome/utils/constants.dart';
+=======
+import 'package:zeehome/screens/chat/chatScreen.dart';
+>>>>>>> 4c5f3de79d64d2aad261001899837538aa8fbee9
 
 class Features extends StatelessWidget {
   Features({
@@ -80,6 +84,7 @@ class Features extends StatelessWidget {
                           onPressed: () {
                             Navigator.of(context).push(scaleIn(PaymentScreen()));
                           },
+<<<<<<< HEAD
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -104,6 +109,14 @@ class Features extends StatelessWidget {
                               )
                             ],
                           )
+=======
+                          child: const Icon(
+                            color: Colors.pink,
+                            size: 24,
+                            semanticLabel: 'Text to announce in accessibility modes',
+                            Icons.attach_money_outlined,
+                          ),
+>>>>>>> 4c5f3de79d64d2aad261001899837538aa8fbee9
                         ),
                       ),
                     ],
@@ -276,6 +289,7 @@ class Features extends StatelessWidget {
                           ],
                         ),
                         child: ElevatedButton(
+<<<<<<< HEAD
                             style: raisedButtonStyle,
                             onPressed: () {
                             },
@@ -303,8 +317,48 @@ class Features extends StatelessWidget {
                                 )
                               ],
                             )
+=======
+                          style: raisedButtonStyle,
+                          onPressed: () {
+                            Navigator.of(context).push(scaleIn( const  SearchLocationScreen()));
+                          },
+                          child: const Icon(
+                            color: Colors.pink,
+                            size: 24,
+                            semanticLabel: 'Text to announce in accessibility modes',
+                            Icons.search,
+                          ),
+>>>>>>> 4c5f3de79d64d2aad261001899837538aa8fbee9
                         ),
                       ),
+                    ],
+                  ),
+                ),
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: const Color.fromARGB(255, 230, 230, 230)),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ElevatedButton(
+                          style: raisedButtonStyle,
+                          onPressed: () {
+                            Navigator.of(context).push(scaleIn( ChatScreen()));
+                          },
+                          child: const Icon(
+                            color: Colors.pink,
+                            size: 24,
+                            semanticLabel: 'Text to announce in accessibility modes',
+                            Icons.message_outlined,
+                          ),
+                        ),
+
+                      ),
+                      const SizedBox(height: 10),
+                      const Text('Tin nhắn', style: TextStyle(fontSize: 14, color: Color.fromARGB(255, 0, 72, 230), fontWeight: FontWeight.w600)),
                     ],
                   ),
                 ),

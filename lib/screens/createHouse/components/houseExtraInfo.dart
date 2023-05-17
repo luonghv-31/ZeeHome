@@ -447,7 +447,7 @@ class _HouseExtraInfoState extends State<HouseExtraInfo> {
                     });
                   }
                 },
-                child: const Text('Tiếp tục', style: TextStyle(color: Colors.white)),
+                child: const Text('Đăng bài', style: TextStyle(color: Colors.white)),
               ),
               const SizedBox(height: 16),
             ],

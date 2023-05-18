@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zeehome/model/authProvider.dart';
+import 'package:zeehome/model/chat/chatModel.dart';
 import 'package:zeehome/model/houseProvider.dart';
 import 'package:zeehome/model/userProvider.dart';
 import 'package:zeehome/utils/theme.dart';
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
       ChangeNotifierProvider(create: (_) => AuthProvider()),
       ChangeNotifierProvider(create: (_) => UserProvider()),
       ChangeNotifierProvider(create: (_) => HouseProvider()),
+      ChangeNotifierProvider(create: (_) => ChatModel()),
     ], child: MaterialApp(
       theme: lightTheme(context),
       title: 'Login',

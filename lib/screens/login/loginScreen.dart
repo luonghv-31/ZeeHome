@@ -11,6 +11,7 @@ import 'package:zeehome/screens/login/signUpScreen.dart';
 import 'package:zeehome/screens/login/forgotPassScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -261,38 +262,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   borderRadius: BorderRadius.circular(6)),
               backgroundColor: const Color.fromARGB(255, 0, 106, 255)),
           onPressed: () {
-            SignInRequest.fetchAuth(
-                emailController.text, passwordController.text)
-                .then((data) {
-              setState(() {
-                access_token:
-                data.access_token;
-                reresh_token:
-                data.refresh_token;
-              });
-              authProvider.setAccessToken(data.access_token);
-              GetUserRequest.fetchUser(data.access_token)
-                  .then((data) => {
-                userProvider.set(
-                    data.gender,
-                    data.phoneNumber,
-                    data.intro,
-                    data.image,
-                    data.birthDate,
-                    data.firstName,
-                    data.lastName,
-                    data.email,
-                    data.registerAt,
-                    data.banned,
-                    data.avgRating,
-                    data.title,
-                    data.role,
-                    data.userId,
-                    data.balance),
-                Navigator.of(context)
-                    .push(scaleIn(HomeScreen()))
-              });
-            });
             checkAllField(emailController.text, passwordController.text)
                 ? {
                     SignInRequest.fetchAuth(
@@ -303,6 +272,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         data.access_token;
                         reresh_token:
                         data.refresh_token;
+                      });
+                      SharedPreferences.getInstance().then((prefs) {
+                        prefs.setString('access_token', data.access_token);
                       });
                       authProvider.setAccessToken(data.access_token);
                       GetUserRequest.fetchUser(data.access_token)
@@ -324,13 +296,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                     data.userId,
                                     data.balance),
                                 Navigator.of(context)
-                                    .push(scaleIn(HomeScreen()))
+                                    .push(scaleIn( const HomeScreen()))
                               });
                     })
                   }
                 : '';
           },
-          child: Text(
+          child: const Text(
             'Đăng nhập',
             style: TextStyle(
                 color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),

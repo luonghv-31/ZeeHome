@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zeehome/model/chat/chatModel.dart';
 import 'package:zeehome/screens/createHouse/createHouseScreen.dart';
 import 'package:zeehome/screens/houseList/houseListScreen.dart';
-import 'package:zeehome/screens/map/mapScreen.dart';
 import 'package:zeehome/screens/payment/paymentScreen.dart';
-import 'package:zeehome/screens/search/locationSearchScreen.dart';
 import 'package:zeehome/screens/user/userDetailScreen.dart';
-<<<<<<< HEAD
 import 'package:zeehome/utils/constants.dart';
-=======
 import 'package:zeehome/screens/chat/chatScreen.dart';
->>>>>>> 4c5f3de79d64d2aad261001899837538aa8fbee9
+class Features extends StatefulWidget {
 
-class Features extends StatelessWidget {
-  Features({
-    Key? key,
-    required this.size,
-  }) : super(key: key);
+  final Size size;
+  Features({Key? key, required this.size}) : super(key: key);
 
+  @override
+  State<Features> createState() => _FeaturesState();
+}
+
+class _FeaturesState extends State<Features> {
   final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
     onPrimary: const Color.fromARGB(255, 255, 136, 175),
     primary: Colors.white,
@@ -28,27 +29,16 @@ class Features extends StatelessWidget {
     ),
   );
 
-  final Size size;
+  // ChatModel chatModel = ChatModel();
 
-  Route scaleIn(Widget page) {
-    return PageRouteBuilder(
-      transitionDuration: const Duration(milliseconds: 300),
-      pageBuilder: (context, animation, secondaryAnimation) => page,
-      transitionsBuilder: (context, animation, secondaryAnimation, page) {
-        var begin = 0.9;
-        var end = 1.0;
-        var curve = Curves.easeInOutBack;
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        var tween2 = Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: curve));
-        return ScaleTransition(
-          scale: animation.drive(tween),
-          child: FadeTransition(
-            opacity: animation.drive(tween2),
-            child: page,
-          ),
-        );
-      },
-    );
+  @override void initState() {
+    // TODO: implement initState
+    debugPrint('check run');
+    SharedPreferences.getInstance().then((prefs) {
+      String access_token = prefs.get('access_token') as String;
+      Provider.of<ChatModel>(context, listen: false).init(access_token);
+    });
+    super.initState();
   }
 
   @override
@@ -80,43 +70,84 @@ class Features extends StatelessWidget {
                           ],
                         ),
                         child: ElevatedButton(
-                          style: raisedButtonStyle,
-                          onPressed: () {
-                            Navigator.of(context).push(scaleIn(PaymentScreen()));
-                          },
-<<<<<<< HEAD
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text('Thanh toán', style: TextStyle(color: Colors.black, fontSize: 20)),
-                              const SizedBox(height: 16,),
-                              Row(
-                                children: [
-                                  const Spacer(),
-                                  Container(
-                                    width: 68,
-                                    height: 68,
-                                    alignment: Alignment.center,
-                                    decoration: const BoxDecoration(
-                                      image: DecorationImage(
-                                          image: AssetImage('assets/images/payment.png'),
-                                          fit: BoxFit.fill
+                            style: raisedButtonStyle,
+                            onPressed: () {
+                              Navigator.of(context).push(scaleInTransition(PaymentScreen()));
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text('Thanh toán', style: TextStyle(color: Colors.black, fontSize: 20)),
+                                const SizedBox(height: 16,),
+                                Row(
+                                  children: [
+                                    const Spacer(),
+                                    Container(
+                                      width: 68,
+                                      height: 68,
+                                      alignment: Alignment.center,
+                                      decoration: const BoxDecoration(
+                                        image: DecorationImage(
+                                            image: AssetImage('assets/images/payment.png'),
+                                            fit: BoxFit.fill
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                ],
-                              )
-                            ],
-                          )
-=======
-                          child: const Icon(
-                            color: Colors.pink,
-                            size: 24,
-                            semanticLabel: 'Text to announce in accessibility modes',
-                            Icons.attach_money_outlined,
-                          ),
->>>>>>> 4c5f3de79d64d2aad261001899837538aa8fbee9
+                                    )
+                                  ],
+                                )
+                              ],
+                            )
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              offset: const Offset(0, 10),
+                              blurRadius: 50,
+                              color: kPrimaryColor.withOpacity(0.23),
+                            ),
+                          ],
+                        ),
+                        child: ElevatedButton(
+                            style: raisedButtonStyle,
+                            onPressed: () {
+                              Navigator.of(context).push(scaleInTransition(const UserDetailScreen()));
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text('Tài khoản', style: TextStyle(color: Colors.black, fontSize: 20)),
+                                const SizedBox(height: 16,),
+                                Row(
+                                  children: [
+                                    const Spacer(),
+                                    Container(
+                                      width: 68,
+                                      height: 68,
+                                      alignment: Alignment.center,
+                                      decoration: const BoxDecoration(
+                                        image: DecorationImage(
+                                            image: AssetImage('assets/images/user.png'),
+                                            fit: BoxFit.fill
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                )
+                              ],
+                            )
                         ),
                       ),
                     ],
@@ -141,57 +172,7 @@ class Features extends StatelessWidget {
                         child: ElevatedButton(
                           style: raisedButtonStyle,
                           onPressed: () {
-                            Navigator.of(context).push(scaleIn(const UserDetailScreen()));
-                          },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text('Tài khoản', style: TextStyle(color: Colors.black, fontSize: 20)),
-                              const SizedBox(height: 16,),
-                              Row(
-                                children: [
-                                  const Spacer(),
-                                  Container(
-                                    width: 68,
-                                    height: 68,
-                                    alignment: Alignment.center,
-                                    decoration: const BoxDecoration(
-                                      image: DecorationImage(
-                                          image: AssetImage('assets/images/user.png'),
-                                          fit: BoxFit.fill
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              )
-                            ],
-                          )
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              offset: const Offset(0, 10),
-                              blurRadius: 50,
-                              color: kPrimaryColor.withOpacity(0.23),
-                            ),
-                          ],
-                        ),
-                        child: ElevatedButton(
-                          style: raisedButtonStyle,
-                          onPressed: () {
-                            Navigator.of(context).push(scaleIn(const HouseListScreen()));
+                            Navigator.of(context).push(scaleInTransition(const HouseListScreen()));
                           },
                           child:Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -239,34 +220,34 @@ class Features extends StatelessWidget {
                           ],
                         ),
                         child: ElevatedButton(
-                          style: raisedButtonStyle,
-                          onPressed: () {
-                            Navigator.of(context).push(scaleIn(const CreateHouseScreen()));
-                          },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text('Tạo bài đăng', style: TextStyle(color: Colors.black, fontSize: 20)),
-                              const SizedBox(height: 16,),
-                              Row(
-                                children: [
-                                  const Spacer(),
-                                  Container(
-                                    width: 68,
-                                    height: 68,
-                                    alignment: Alignment.center,
-                                    decoration: const BoxDecoration(
-                                      image: DecorationImage(
-                                          image: AssetImage('assets/images/createHouse.png'),
-                                          fit: BoxFit.fill
+                            style: raisedButtonStyle,
+                            onPressed: () {
+                              Navigator.of(context).push(scaleInTransition(const CreateHouseScreen()));
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text('Tạo bài đăng', style: TextStyle(color: Colors.black, fontSize: 20)),
+                                const SizedBox(height: 16,),
+                                Row(
+                                  children: [
+                                    const Spacer(),
+                                    Container(
+                                      width: 68,
+                                      height: 68,
+                                      alignment: Alignment.center,
+                                      decoration: const BoxDecoration(
+                                        image: DecorationImage(
+                                            image: AssetImage('assets/images/createHouse.png'),
+                                            fit: BoxFit.fill
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                ],
-                              )
-                            ],
-                          )
+                                    )
+                                  ],
+                                )
+                              ],
+                            )
                         ),
                       ),
                     ],
@@ -289,9 +270,9 @@ class Features extends StatelessWidget {
                           ],
                         ),
                         child: ElevatedButton(
-<<<<<<< HEAD
                             style: raisedButtonStyle,
                             onPressed: () {
+                              Navigator.of(context).push(scaleInTransition( ChatScreen()));
                             },
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -317,48 +298,8 @@ class Features extends StatelessWidget {
                                 )
                               ],
                             )
-=======
-                          style: raisedButtonStyle,
-                          onPressed: () {
-                            Navigator.of(context).push(scaleIn( const  SearchLocationScreen()));
-                          },
-                          child: const Icon(
-                            color: Colors.pink,
-                            size: 24,
-                            semanticLabel: 'Text to announce in accessibility modes',
-                            Icons.search,
-                          ),
->>>>>>> 4c5f3de79d64d2aad261001899837538aa8fbee9
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: const Color.fromARGB(255, 230, 230, 230)),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: ElevatedButton(
-                          style: raisedButtonStyle,
-                          onPressed: () {
-                            Navigator.of(context).push(scaleIn( ChatScreen()));
-                          },
-                          child: const Icon(
-                            color: Colors.pink,
-                            size: 24,
-                            semanticLabel: 'Text to announce in accessibility modes',
-                            Icons.message_outlined,
-                          ),
-                        ),
-
-                      ),
-                      const SizedBox(height: 10),
-                      const Text('Tin nhắn', style: TextStyle(fontSize: 14, color: Color.fromARGB(255, 0, 72, 230), fontWeight: FontWeight.w600)),
                     ],
                   ),
                 ),
@@ -369,3 +310,4 @@ class Features extends StatelessWidget {
     );
   }
 }
+

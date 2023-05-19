@@ -62,6 +62,11 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void updateBalance(double balance) {
+    _balance = balance;
+    notifyListeners();
+  }
+
   User getUserObj () {
     return User(
       gender: _gender,

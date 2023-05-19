@@ -26,8 +26,6 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isRememberMe = false;
   late SharedPreferences sharedPreferences;
 
-  Auth auth = Auth(access_token: '', refresh_token: '');
-
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -264,15 +262,7 @@ class _LoginScreenState extends State<LoginScreen> {
           onPressed: () {
             checkAllField(emailController.text, passwordController.text)
                 ? {
-                    SignInRequest.fetchAuth(
-                            emailController.text, passwordController.text)
-                        .then((data) {
-                      setState(() {
-                        access_token:
-                        data.access_token;
-                        reresh_token:
-                        data.refresh_token;
-                      });
+                    SignInRequest.fetchAuth(emailController.text, passwordController.text).then((data) {
                       SharedPreferences.getInstance().then((prefs) {
                         prefs.setString('access_token', data.access_token);
                       });
@@ -298,7 +288,21 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Navigator.of(context)
                                     .push(scaleIn( const HomeScreen()))
                               });
-                    })
+                    }).catchError((error) {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Cảnh báo'),
+                            content: const Text('Tài khoản hoặc mật khẩu không đúng'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, 'Cancel'),
+                                child: const Text('Ok'),
+                                ),
+                              ],
+                          ),
+                        );
+                      })
                   }
                 : '';
           },

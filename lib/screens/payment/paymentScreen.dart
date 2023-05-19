@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zeehome/model/userProvider.dart';
+import 'package:zeehome/network/user/user_request.dart';
 import 'package:zeehome/screens/payment/paymentMethod/bankingScreen.dart';
 import 'package:zeehome/screens/payment/paymentMethod/vnpayScreen.dart';
 import 'package:zeehome/utils/constants.dart';
@@ -12,13 +14,14 @@ class PaymentScreen extends StatelessWidget {
   final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
     onPrimary: const Color.fromARGB(255, 255, 136, 175),
     primary: Colors.white,
-    minimumSize: const Size(52, 52),
-    maximumSize: const Size(52, 52),
+    minimumSize: const Size(176, 132),
+    maximumSize: const Size(176, 132),
     // padding: const EdgeInsets.symmetric(horizontal: 16),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(10)),
     ),
   );
+
 
   @override
   Widget build(BuildContext context) {
@@ -114,12 +117,26 @@ class PaymentScreen extends StatelessWidget {
                           Expanded(
                               child: Row(
                                 children: [
-                                  Text('Số dư: '),
+                                  const Text('Số dư: '),
                                   Text(userProvider.balance.toString()),
                                 ],
                               )
                           ),
-                          Image.asset('assets/icon/money-bag.png'),
+                          IconButton(
+                            onPressed: () {
+                              SharedPreferences.getInstance().then((prefs) {
+                                String access_token = prefs.get(
+                                    'access_token') as String;
+                                GetUserRequest.fetchUser(access_token).then((value) => {
+                                  userProvider.updateBalance(value.balance),
+                                });
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.refresh,
+                              color: Colors.black54,
+                            )
+                          ),
                         ],
                       ),
                     ),
@@ -133,13 +150,10 @@ class PaymentScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget> [
-                  const SizedBox(height: 32,),
-                  const Text('Chọn phương thức nạp tiền', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-                  const SizedBox(height: 16,),
                   GridView.count(
                       shrinkWrap: true,
-                      childAspectRatio: (1 / 1.1),
-                      crossAxisCount: 4,
+                      childAspectRatio: (1 / .76),
+                      crossAxisCount: 2,
                       children: [
                         Container(
                           child: Column(
@@ -147,24 +161,47 @@ class PaymentScreen extends StatelessWidget {
                             children: [
                               Container(
                                 decoration: BoxDecoration(
-                                  border: Border.all(color: const Color.fromARGB(255, 230, 230, 230)),
-                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.transparent,
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      offset: const Offset(0, 10),
+                                      blurRadius: 50,
+                                      color: kPrimaryColor.withOpacity(0.23),
+                                    ),
+                                  ],
                                 ),
                                 child: ElevatedButton(
-                                  style: raisedButtonStyle,
-                                  onPressed: () {
-                                    Navigator.of(context).push(scaleInTransition(const BankingScreen()));
-                                  },
-                                  child: const Icon(
-                                    Icons.savings,
-                                    color: Colors.pink,
-                                    size: 24,
-                                    semanticLabel: 'Text to announce in accessibility modes',
-                                  ),
+                                    style: raisedButtonStyle,
+                                    onPressed: () {
+                                      Navigator.of(context).push(scaleInTransition(BankingScreen()));
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        const Text('Banking', style: TextStyle(color: Colors.black, fontSize: 20)),
+                                        const SizedBox(height: 16,),
+                                        Row(
+                                          children: [
+                                            const Spacer(),
+                                            Container(
+                                              width: 68,
+                                              height: 68,
+                                              alignment: Alignment.center,
+                                              decoration: const BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: AssetImage('assets/images/banking.png'),
+                                                    fit: BoxFit.fill
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    )
                                 ),
                               ),
-                              const SizedBox(height: 10),
-                              const Text('Banking', style: TextStyle(fontSize: 14, color: Color.fromARGB(255, 0, 72, 230), fontWeight: FontWeight.w600)),
                             ],
                           ),
                         ),
@@ -174,24 +211,47 @@ class PaymentScreen extends StatelessWidget {
                             children: [
                               Container(
                                 decoration: BoxDecoration(
-                                  border: Border.all(color: const Color.fromARGB(255, 230, 230, 230)),
-                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.transparent,
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      offset: const Offset(0, 10),
+                                      blurRadius: 50,
+                                      color: kPrimaryColor.withOpacity(0.23),
+                                    ),
+                                  ],
                                 ),
                                 child: ElevatedButton(
-                                  style: raisedButtonStyle,
-                                  onPressed: () {
-                                    Navigator.of(context).push(scaleInTransition(const VnpayScreen()));
-                                  },
-                                  child: const Icon(
-                                    color: Colors.pink,
-                                    size: 24,
-                                    semanticLabel: 'Text to announce in accessibility modes',
-                                    Icons.account_balance_wallet,
-                                  ),
+                                    style: raisedButtonStyle,
+                                    onPressed: () {
+                                      Navigator.of(context).push(scaleInTransition(const VnpayScreen()));
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        const Text('VNPay', style: TextStyle(color: Colors.black, fontSize: 20)),
+                                        const SizedBox(height: 16,),
+                                        Row(
+                                          children: [
+                                            const Spacer(),
+                                            Container(
+                                              width: 68,
+                                              height: 68,
+                                              alignment: Alignment.center,
+                                              decoration: const BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: AssetImage('assets/images/vnpay.png'),
+                                                    fit: BoxFit.fill
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    )
                                 ),
                               ),
-                              const SizedBox(height: 10),
-                              const Text('VN Pay', style: TextStyle(fontSize: 14, color: Color.fromARGB(255, 0, 72, 230), fontWeight: FontWeight.w600)),
                             ],
                           ),
                         ),

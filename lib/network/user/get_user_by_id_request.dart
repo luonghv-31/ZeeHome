@@ -1,19 +1,20 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:zeehome/model/chat/chatUser.dart';
 import 'package:zeehome/model/user.dart';
 
 const String url = 'https://huydt.online/api/users';
 
 class GetUserByIdRequest {
 
-  static User parseUser(String responseBody) {
+  static ChatUser parseUser(String responseBody) {
     var response = json.decode(responseBody);
-    User user = User.fromJson(response);
+    ChatUser user = ChatUser.fromJson(response);
     return user;
   }
 
-  static Future<User> fetchUser(String access_token, String userId) async {
+  static Future<ChatUser> fetchUser(String access_token, String userId) async {
     final response = await http.get(
       Uri.parse('$url/$userId'),
       headers: <String, String> {

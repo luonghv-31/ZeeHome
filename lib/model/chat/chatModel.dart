@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:zeehome/model/chat/ChatMessages.dart';
@@ -65,20 +67,49 @@ class ChatModel with ChangeNotifier {
     });
   }
 
-  void deleteChatHistory() {
-
+  String getDate () {
+    debugPrint(DateTime.now().toString());
+    return DateTime.now().toString();
   }
 
-  // void sendMessage(String text, String receiverChatID) {
-  //   messages.add(Message(text, currentUser.chatID, receiverChatID));
-  //   socketIO.sendMessage(
-  //     'send_message',
-  //     json.encode({
-  //       'receiverChatID': receiverChatID,
-  //       'senderChatID': currentUser.chatID,
-  //       'content': text,
-  //     }),
-  //   );
-  //   notifyListeners();
-  // }
+  void sendTextMessage(String text, From fromUser, From toUser) {
+    String body = jsonEncode({
+      "type": "text",
+      "text": text,
+    });
+    socket.emit('FE_send_message', {
+      "to": toUser.sId,
+      "body": body,
+    });
+    messages.add(Messages(from: fromUser, to: toUser, createAt: getDate(), body: body));
+    notifyListeners();
+  }
+
+  void sendImageMessage(String text, String imageUrl, From fromUser, From toUser) {
+    String body = jsonEncode({
+      "type": "text",
+      "text": text,
+      "image": imageUrl,
+    });
+    socket.emit('FE_send_message', {
+      "to": toUser.sId,
+      "body": body,
+    });
+    messages.add(Messages(from: fromUser, to: toUser, createAt: getDate(), body: body));
+    notifyListeners();
+  }
+
+  void sendLinkMessage(String text, String link, From fromUser, From toUser) {
+    String body = jsonEncode({
+      "type": "text",
+      "text": text,
+      "link": link,
+    });
+    socket.emit('FE_send_message', {
+      "to": toUser.sId,
+      "body": body,
+    });
+    messages.add(Messages(from: fromUser, to: toUser, createAt: getDate(), body: body));
+    notifyListeners();
+  }
 }

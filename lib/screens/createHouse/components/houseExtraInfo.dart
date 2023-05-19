@@ -246,6 +246,7 @@ class _HouseExtraInfoState extends State<HouseExtraInfo> {
                   ),
                 ],
               ),
+              const SizedBox(height: 12,),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -263,6 +264,7 @@ class _HouseExtraInfoState extends State<HouseExtraInfo> {
                   ),
                 ],
               ),
+              const SizedBox(height: 12,),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -419,32 +421,57 @@ class _HouseExtraInfoState extends State<HouseExtraInfo> {
                     );
                     final List<String> imagesArray = images != null ? <String>[images.toString()] : <String>[];
                     widget.setExtraHouseInfo(double.parse(price.text), double.parse(square.text), ac, parking, elevator, pet, int.parse(rooms.text), int.parse(bathRooms.text), int.parse(bedRooms.text), double.parse(maintanceFee.text), furnished, thumbnail, imagesArray, video );
-                    CreateHouseRequest.fetchCreateHouse(widget.access_token, widget.getHouseInfo()).then((value) => {
-                      showDialog<String>(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Tạo bài đăng thành công'),
-                          content: Container(
-                            child: Column(
+                    CreateHouseRequest.fetchCreateHouse(widget.access_token, widget.getHouseInfo())
+                      .then((value) => {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Tạo bài đăng thành công'),
+                            content: Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                mainAxisSize: MainAxisSize.min,
+                                children: const [
+                                  SizedBox( height: 12 ),
+                                  Text('Giờ đây mọi người đã có thể xem bài đăng cùa bạn'),
+                                ],
+                              ),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () =>  {
+                                  Navigator.of(context).push(scaleInTransition(HouseDetailScreen(houseDetail: widget.getHouseInfo()))),
+                              },
+                                child: const Text('Xác nhận'),
+                              ),
+                            ],
+                          ),
+                        )
+                      }).catchError((err) {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Cảnh báo'),
+                            content: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               mainAxisSize: MainAxisSize.min,
                               children: const [
                                 SizedBox( height: 12 ),
-                                Text('Giờ đây mọi người đã có thể xem bài đăng cùa bạn'),
+                                Text('Tài khoản không đủ tiền để đăng bài!'),
                               ],
                             ),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () =>  {
+                                  Navigator.pop(context, 'Cancel'),
+                                  // Navigator.of(context).push(scaleInTransition(HouseDetailScreen(houseDetail: widget.getHouseInfo()))),
+                                },
+                                child: const Text('Xác nhận'),
+                              ),
+                            ],
                           ),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () =>  {
-                                Navigator.of(context).push(scaleInTransition(HouseDetailScreen(houseDetail: widget.getHouseInfo()))),
-                            },
-                              child: const Text('Xác nhận'),
-                            ),
-                          ],
-                        ),
-                      )
-                    });
+                        );
+                      });
                   }
                 },
                 child: const Text('Đăng bài', style: TextStyle(color: Colors.white)),

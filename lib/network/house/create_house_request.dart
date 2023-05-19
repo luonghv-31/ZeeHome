@@ -46,6 +46,10 @@ class CreateHouseRequest {
         throw Exception('Some error happen'); // Request Timeout response status code
       },
     );
+
+    debugPrint(response.statusCode.toString());
+    debugPrint(response.body.toString());
+
     if (response.statusCode == 200) {
       return true;
     } else if (response.statusCode == 404) {

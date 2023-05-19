@@ -49,6 +49,8 @@ class UserProvider with ChangeNotifier {
 
   double get balance => _balance;
 
+  String get userId => _userId;
+
   void updateUser(String firstName, String lastName, String birthDate, String gender, String intro, String image, String phoneNumber) {
     _gender = gender;
     _phoneNumber = phoneNumber;
@@ -57,6 +59,11 @@ class UserProvider with ChangeNotifier {
     _birthDate = birthDate;
     _firstName = firstName;
     _lastName = lastName;
+    notifyListeners();
+  }
+
+  void updateBalance(double balance) {
+    _balance = balance;
     notifyListeners();
   }
 

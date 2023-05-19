@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:zeehome/screens/chat/Models/chatUsersModel.dart';
+import 'package:provider/provider.dart';
+import 'package:zeehome/model/chat/chatModel.dart';
 import 'package:zeehome/screens/chat/Widgets/conversationList.dart';
 
 class ChatPage extends StatefulWidget {
@@ -8,82 +10,69 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  List<ChatUsers> chatUsers = [
-    ChatUsers(
-        name: "Ngô Bá Khá",
-        secondaryText: "Awesome Setup",
-        image: 'assets/images/app-bg.jpg',
-        time: "Ngay bây giờ",
-        messageText: 'Anh ra tù rồi', 
-        text: 'dfghdfg', 
-        imageURL: 'https://danviet.mediacdn.vn/upload/2-2019/images/2019-04-02/Vi-sao-Kha-Banh-tro-thanh-hien-tuong-dinh-dam-tren-mang-xa-hoi-khabanh-1554192528-width660height597.jpg',
-        ),
-        ChatUsers(
-        name: "Ngô Bá Khá",
-        secondaryText: "Awesome Setup",
-        image: 'assets/images/app-bg.jpg',
-        time: "Ngay bây giờ",
-        messageText: 'Anh ra tù rồi', 
-        text: 'dfghdfg', 
-        imageURL: 'https://danviet.mediacdn.vn/upload/2-2019/images/2019-04-02/Vi-sao-Kha-Banh-tro-thanh-hien-tuong-dinh-dam-tren-mang-xa-hoi-khabanh-1554192528-width660height597.jpg',
-        ),
-        ChatUsers(
-        name: "Ngô Bá Khá",
-        secondaryText: "Awesome Setup",
-        image: 'assets/images/app-bg.jpg',
-        time: "Ngay bây giờ",
-        messageText: 'Anh ra tù rồi', 
-        text: 'dfghdfg', 
-        imageURL: 'https://danviet.mediacdn.vn/upload/2-2019/images/2019-04-02/Vi-sao-Kha-Banh-tro-thanh-hien-tuong-dinh-dam-tren-mang-xa-hoi-khabanh-1554192528-width660height597.jpg',
-        ),
-    
-  ];
+
+  String parseImage (String? imageUrl) {
+    if (imageUrl != null) {
+      final splitted = imageUrl.split('/');
+      return 'https://d38jr024nxkzmx.cloudfront.net/${splitted[3]}';
+    }
+    return 'https://d38jr024nxkzmx.cloudfront.net/1fdecb44-f964-44e9-ac29-3906228b0835_MjAyMy0wNS0xN1QxMTo0MToyNy4yNTE3ODIyNTM%3D_payment.png';
+  }
+
+  String parseMessageBody(String body) {
+    final result = json.decode(body);
+    return result['text'].toString();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(top: 16, left: 16, right: 16),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: "Tìm kiếm...",
-                  hintStyle: TextStyle(color: Colors.grey.shade600),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: Colors.grey.shade600,
-                    size: 20,
+    return Consumer<ChatModel>(builder: (context, chatModelProvider, child) {
+      return Scaffold(
+        body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: "Tìm kiếm...",
+                    hintStyle: TextStyle(color: Colors.grey.shade600),
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: Colors.grey.shade600,
+                      size: 20,
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey.shade100,
+                    contentPadding: const EdgeInsets.all(8),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.grey.shade100)),
                   ),
-                  filled: true,
-                  fillColor: Colors.grey.shade100,
-                  contentPadding: EdgeInsets.all(8),
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.grey.shade100)),
                 ),
               ),
-            ),
-            ListView.builder(
-              itemCount: chatUsers.length,
-              shrinkWrap: true,
-              padding: EdgeInsets.only(top: 16),
-              physics: NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return ConversationList(
-                  name: chatUsers[index].name,
-                  messageText: chatUsers[index].messageText,
-                  imageUrl: chatUsers[index].imageURL,
-                  time: chatUsers[index].time,
-                  isMessageRead: (index == 0 || index == 3) ? true : false,
-                );
-              },
-            ),
-          ],
+              ListView.builder(
+                itemCount: chatModelProvider.chatWiths.length,
+                shrinkWrap: true,
+                padding: const EdgeInsets.only(top: 16),
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return ConversationList(
+                    name: '${chatModelProvider.chatWiths[index].info?.firstName} ${chatModelProvider.chatWiths[index].info?.lastName}',
+                    messageText: parseMessageBody(chatModelProvider.chatWiths[index].message!),
+                    imageUrl: parseImage(chatModelProvider.chatWiths[index].info?.image),
+                    time: chatModelProvider.chatWiths[index].lastTimeCommunicate.toString(),
+                    isMessageRead: (index == 0 || index == 3) ? true : false,
+                    userId: '${chatModelProvider.chatWiths[index].info?.sId}',
+                  );
+                },
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

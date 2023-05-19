@@ -120,7 +120,7 @@ class _BankingScreenState extends State<BankingScreen> {
                           });
                         }
                       },
-                      child: const Text('Tiếp tục'),
+                      child: const Text('Tiếp tục', style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 ),
@@ -168,14 +168,7 @@ class _BankingScreenState extends State<BankingScreen> {
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              style: IconButton.styleFrom(
-                                foregroundColor: Colors.red,
-                                backgroundColor: Colors.red,
-                                disabledBackgroundColor: Colors.red.withOpacity(0.12),
-                                hoverColor: Colors.red.withOpacity(0.08),
-                                focusColor: Colors.red.withOpacity(0.12),
-                                highlightColor: Colors.red.withOpacity(0.12),
-                              )),
+                             ),
                           const SizedBox(width: 16,),
                           const Text('Nạp tiền phương thức Banking', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),),
                         ],

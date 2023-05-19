@@ -39,7 +39,7 @@ class UserDetail extends StatelessWidget {
                   height: size.height * 0.25 - 27,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/images/background2.jpg'),
+                      image: AssetImage('assets/images/background.jpg'),
                       fit: BoxFit.cover,
                       colorFilter: ColorFilter.mode(
                         Color.fromARGB(255, 255, 255, 255),
@@ -50,46 +50,6 @@ class UserDetail extends StatelessWidget {
                       bottomLeft: Radius.circular(25),
                       bottomRight: Radius.circular(25),
                     ),
-                  ),
-                  child: Row(
-                    children: <Widget>[
-
-                      Container(
-                        margin: const EdgeInsets.only(top: 46.0, left: 8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${user.firstName} ${user.lastName}',
-                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 20),
-                            ),
-                            Text(
-                              user.email,
-                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 20),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Spacer(),
-                      Container(
-                        margin: const EdgeInsets.only(top: 40.0),
-                        width: 60.0,
-                        height: 60.0,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(0, 255, 255, 255),
-                          image: DecorationImage(
-                            image: NetworkImage(user.image),
-                            fit: BoxFit.cover,
-                          ),
-                          borderRadius: const BorderRadius.all( Radius.circular(50.0)),
-                          border: Border.all(
-                            color: Colors.white,
-                            width: 4.0,
-                          ),
-                        ),
-                      ),
-                      // Image.asset("assets/logo.png")
-                    ],
                   ),
                 ),
                 Positioned(
@@ -117,8 +77,8 @@ class UserDetail extends StatelessWidget {
                         Expanded(
                             child: Row(
                               children: [
-                                Text('Số dư: '),
-                                Text(user.balance.toString()),
+                                const Text('Số dư: '),
+                                Text((user.balance / 100).toString()),
                               ],
                             )
                         ),
@@ -144,6 +104,14 @@ class UserDetail extends StatelessWidget {
                 children: [
                   const Text('Thông tin cá nhân', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black),),
                   const SizedBox(height: 12),
+                  Align(
+                    child: CircleAvatar(
+                      radius: 40,
+                      backgroundColor: Colors.brown.shade800,
+                      backgroundImage: NetworkImage(user.image),
+                    ),
+                  ),
+                  const SizedBox(height: 24,),
                   Row(
                     children: [
                       const Text('Họ và tên: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),

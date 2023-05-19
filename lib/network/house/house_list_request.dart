@@ -20,7 +20,7 @@ class HouseListRequest {
 
     debugPrint(response.body.toString());
     if (response.statusCode == 200) {
-      return compute( parseHouseList, response.body);
+      return compute( parseHouseList, utf8.decode(response.bodyBytes));
     } else if (response.statusCode == 404) {
       throw Exception('Not Found');
     } else {

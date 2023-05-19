@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:flutter/rendering.dart';
+
 import 'autoCompletePrediction.dart';
 
 /// The Autocomplete response contains place predictions and status
@@ -20,7 +22,6 @@ class PlaceAutocompleteResponse {
   static PlaceAutocompleteResponse parseAutocompleteResult(
       String responseBody) {
     final parsed = json.decode(responseBody).cast<String, dynamic>();
-
     return PlaceAutocompleteResponse.fromJson(parsed);
   }
 }

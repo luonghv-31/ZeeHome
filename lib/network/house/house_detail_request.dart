@@ -20,7 +20,7 @@ class GetHouseDetailRequest {
       },
     );
     if (response.statusCode == 200) {
-      return compute( parseHouse, response.body);
+      return compute( parseHouse, utf8.decode(response.bodyBytes));
     } else if (response.statusCode == 404) {
       throw Exception('Not Found');
     } else if (response.statusCode == 401) {

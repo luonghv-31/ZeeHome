@@ -44,6 +44,68 @@ class HouseProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setInfo(House houseInfo, String houseId) {
+    _houseId = houseId;
+
+    _title = houseInfo.title;
+    _description = houseInfo.description;
+    _houseType = houseInfo.houseType;
+    _houseCategory = houseInfo.houseCategory;
+    _province = houseInfo.province;
+    _district = houseInfo.district;
+    _ward = houseInfo.ward;
+    _owner = houseInfo.owner;
+
+    _latitude = houseInfo.latitude;
+    _longitude = houseInfo.longitude;
+    _address = houseInfo.address;
+
+    _price = houseInfo.price;
+    _square = houseInfo.square;
+    _ac = houseInfo.ac;
+    _parking = houseInfo.parking;
+    _elevator = houseInfo.elevator;
+    _pet = houseInfo.pet;
+    _bathRooms = houseInfo.bathRooms;
+    _bedRooms = houseInfo.bedRooms;
+    _maintenanceFee = houseInfo.maintenanceFee;
+    _furnished = houseInfo.furnished;
+    _thumbnail = houseInfo.thumbnail;
+    _images = houseInfo.images;
+    _video = houseInfo.video;
+    _rooms = houseInfo.rooms;
+
+    notifyListeners();
+  }
+
+  void editBasicInfo(String title, String description, int houseType, int houseCategory) {
+    _title = title;
+    _description = description;
+    _houseType = houseType;
+    _houseCategory = houseCategory;
+
+    notifyListeners();
+  }
+
+  void editExtraInfo(double price, double square, bool ac, bool parking, bool elevator, bool pet, int rooms, int bathRooms, int bedRooms, double maintenanceFee, bool furnished, String? thumbnail, List<String>? images, String? video ) {
+    _price = price;
+    _square = square;
+    _ac = ac;
+    _parking = parking;
+    _elevator = elevator;
+    _pet = pet;
+    _bathRooms = bathRooms;
+    _bedRooms = bedRooms;
+    _maintenanceFee = maintenanceFee;
+    _furnished = furnished;
+    _thumbnail = thumbnail;
+    _images = images;
+    _video = video;
+    _rooms = rooms;
+
+    notifyListeners();
+  }
+
   void setPosition (double latitude, double longtitude, String address) {
     _latitude = latitude;
     _longitude = longtitude;
@@ -75,7 +137,7 @@ class HouseProvider with ChangeNotifier {
 
   House getHouseInfor() {
     return House(
-      houseId: '',
+      houseId: _houseId,
       latitude: _latitude,
       longitude: _longitude,
       title: _title,
@@ -101,6 +163,7 @@ class HouseProvider with ChangeNotifier {
       thumbnail: _thumbnail,
       video: _video,
       owner: _owner,
+      rooms: _rooms,
     );
   }
 }

@@ -21,8 +21,8 @@ class _FeaturesState extends State<Features> {
   final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
     onPrimary: const Color.fromARGB(255, 255, 136, 175),
     primary: Colors.white,
-    minimumSize: const Size(176, 132),
-    maximumSize: const Size(176, 132),
+    minimumSize: const Size(184, 138),
+    maximumSize: const Size(184, 138),
     // padding: const EdgeInsets.symmetric(horizontal: 16),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(10)),

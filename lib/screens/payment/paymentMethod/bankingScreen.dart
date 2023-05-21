@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:zeehome/model/authProvider.dart';
 import 'package:zeehome/model/userProvider.dart';
 import 'package:zeehome/network/payment/banking_request.dart';
+import 'package:flutter/services.dart';
 
 class BankingScreen extends StatefulWidget {
   const BankingScreen({super.key});
@@ -14,6 +15,18 @@ class BankingScreen extends StatefulWidget {
 }
 
 class _BankingScreenState extends State<BankingScreen> {
+
+  final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
+    onPrimary: const Color.fromARGB(255, 166, 136, 255),
+    primary: Colors.white,
+    // minimumSize: const Size(176, 132),
+    // maximumSize: const Size(176, 132),
+    padding: const EdgeInsets.all(2),
+    // padding: const EdgeInsets.symmetric(horizontal: 16),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(4)),
+    ),
+  );
 
   final _formKey = GlobalKey<FormState>();
   TextEditingController amountController = TextEditingController();
@@ -93,16 +106,20 @@ class _BankingScreenState extends State<BankingScreen> {
                                         const SizedBox(height: 20),
                                         const Text('Nội dung chuyển khoản:'),
                                         const SizedBox(height: 8),
-                                        Container(
-                                          padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 8),
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(6),
-                                            color: Colors.black12,
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                        ElevatedButton(
+                                          style: raisedButtonStyle,
+                                          onPressed: (){
+                                            Clipboard.setData(ClipboardData(text: value)).then((_){
+                                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Đã sao chép nội dung chuyển khoản!")));
+                                            });
+                                          },
+                                          child: Stack(
                                             children: [
-                                              Text(value, style: const TextStyle(fontWeight: FontWeight.w500)),
+                                              Container(
+                                                padding: const EdgeInsets.only(left: 20, top: 20, bottom: 20, right: 14),
+                                                child: Text(value, style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.black54)),
+                                              ),
+                                              const Positioned(top: 0, right: 0,child: Icon(Icons.folder_copy, color: Colors.black54,),)
                                             ],
                                           ),
                                         )
@@ -111,7 +128,10 @@ class _BankingScreenState extends State<BankingScreen> {
                                   ),
                                   actions: <Widget>[
                                     TextButton(
-                                      onPressed: () => Navigator.pop(context, 'Cancel'),
+                                      onPressed: () {
+                                        Navigator.pop(context, 'Cancel');
+
+                                      },
                                       child: const Text('Xác nhận'),
                                     ),
                                   ],

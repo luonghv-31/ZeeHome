@@ -57,9 +57,29 @@ class PaymentScreen extends StatelessWidget {
                       ),
                     ),
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Container(
-                          margin: const EdgeInsets.only(top: 46.0, left: 8.0),
+                          margin: const EdgeInsets.only(top: 40.0),
+                          width: 60.0,
+                          height: 60.0,
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(0, 255, 255, 255),
+                            image: DecorationImage(
+                              image: NetworkImage(userProvider.image),
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+                            border: Border.all(
+                              color: Colors.white,
+                              width: 2.0,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10,),
+                        Container(
+                          margin: const EdgeInsets.only(top: 48.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -74,22 +94,26 @@ class PaymentScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        const Spacer(),
-                        Container(
-                          margin: const EdgeInsets.only(top: 40.0),
-                          width: 60.0,
-                          height: 60.0,
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all( Radius.circular(50.0)),
-                          ),
-                          child: const Icon(
-                            Icons.person,
-                            size: 30,
-                          ),
-                        ),
                         // Image.asset("assets/logo.png")
                       ],
+                    ),
+                  ),
+                  Positioned(
+                    top: 32,
+                    left: 12,
+                    child: CircleAvatar(
+                        backgroundColor: secondaryColor10LightTheme,
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(
+                            Icons.arrow_back,
+                            color: secondaryColor40LightTheme,
+                            size: 24.0,
+                            semanticLabel: 'Text to announce in accessibility modes',
+                          ),
+                        )
                     ),
                   ),
                   Positioned(
@@ -118,7 +142,7 @@ class PaymentScreen extends StatelessWidget {
                               child: Row(
                                 children: [
                                   const Text('Số dư: '),
-                                  Text(userProvider.balance.toString()),
+                                  Text((userProvider.balance / 100).toString()),
                                 ],
                               )
                           ),

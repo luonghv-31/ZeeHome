@@ -34,6 +34,7 @@ class ChatModel with ChangeNotifier {
       ChatDetail chatDetail = ChatDetail.fromJson(data);
       Messages newMessage = Messages(from: chatDetail.chat?.from, to: chatDetail.chat?.to, body: chatDetail.chat?.body, createAt: chatDetail.chat?.createAt);
       messages.add(newMessage);
+      getChatWith();
       notifyListeners();
     });
 
@@ -83,6 +84,9 @@ class ChatModel with ChangeNotifier {
     });
     messages.add(Messages(from: fromUser, to: toUser, createAt: getDate(), body: body));
     notifyListeners();
+
+
+  //
   }
 
   void sendImageMessage(String text, String imageUrl, From fromUser, From toUser) {

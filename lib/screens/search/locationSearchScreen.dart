@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:zeehome/components/locationListTitle.dart';
 import 'package:zeehome/model/autocomplete/placeAutoCompleteResponse.dart';
 import 'package:zeehome/model/houses/parameter.dart';
+import 'package:zeehome/network/map/geo_coding_request.dart';
 import 'package:zeehome/network/map/place_request.dart';
 import 'package:zeehome/screens/map/mapScreen.dart';
 import 'package:zeehome/utils/constants.dart';
@@ -191,6 +193,7 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
           {
             "input": query,
             "key": apiKey,
+            "types": "geocode",
           }
       );
       String? response = await PlaceRequest.fetchPlaces(uri);
@@ -211,252 +214,255 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
     super.dispose();
   }
 
+  static Future<void> GetGeoCode (String address) async {
+    // List<Location> locations = await locationFromAddress("Gronausestraat 710, Enschede");
+    // debugPrint(locations[0].latitude.toString());
+  }
+
   Widget buildFilter() {
-    return Container(
-      child: Column(
-        children: [
-          const Text('Bộ lọc', style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.w300)),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text('Thể loại: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-              DropdownButtonFormField(
-                value: houseType,
-                isExpanded: true,
-                onChanged: (value) {
-                  setState(() {
-                    houseType = value;
-                  });
-                },
-                onSaved: (value) {
-                  setState(() {
-                    houseType = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Điền đầy đủ thông tin";
-                  } else {
-                    return null;
-                  }
-                },
-                items: houseTypeOptions
-                    .map((e) {
-                  return DropdownMenuItem(
-                    value: e['value'],
-                    child: Text(
-                      e['label'].toString(),
-                    ),
-                  );
-                }).toList(),
-              ),
+    return Column(
+      children: [
+        const Text('Bộ lọc', style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.w300)),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Thể loại: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+            DropdownButtonFormField(
+              value: houseType,
+              isExpanded: true,
+              onChanged: (value) {
+                setState(() {
+                  houseType = value;
+                });
+              },
+              onSaved: (value) {
+                setState(() {
+                  houseType = value;
+                });
+              },
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Điền đầy đủ thông tin";
+                } else {
+                  return null;
+                }
+              },
+              items: houseTypeOptions
+                  .map((e) {
+                return DropdownMenuItem(
+                  value: e['value'],
+                  child: Text(
+                    e['label'].toString(),
+                  ),
+                );
+              }).toList(),
+            ),
 
-              const SizedBox(height: 8,),
-              const Text('Loại hình: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-              DropdownButtonFormField(
-                value: houseCategory,
-                isExpanded: true,
-                onChanged: (value) {
-                  setState(() {
-                    houseCategory = value;
-                  });
-                },
-                onSaved: (value) {
-                  setState(() {
-                    houseCategory = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Điền đầy đủ thông tin";
-                  } else {
-                    return null;
-                  }
-                },
-                items: houseCategoryOptions
-                    .map((e) {
-                  return DropdownMenuItem(
-                    value: e['value'],
-                    child: Text(
-                      e['label'].toString(),
-                    ),
-                  );
-                }).toList(),
-              ),
+            const SizedBox(height: 8,),
+            const Text('Loại hình: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+            DropdownButtonFormField(
+              value: houseCategory,
+              isExpanded: true,
+              onChanged: (value) {
+                setState(() {
+                  houseCategory = value;
+                });
+              },
+              onSaved: (value) {
+                setState(() {
+                  houseCategory = value;
+                });
+              },
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Điền đầy đủ thông tin";
+                } else {
+                  return null;
+                }
+              },
+              items: houseCategoryOptions
+                  .map((e) {
+                return DropdownMenuItem(
+                  value: e['value'],
+                  child: Text(
+                    e['label'].toString(),
+                  ),
+                );
+              }).toList(),
+            ),
 
-              const SizedBox(height: 8,),
-              const Text('Giá thấp nhất: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-              DropdownButtonFormField(
-                value: priceFrom,
-                isExpanded: true,
-                onChanged: (value) {
-                  setState(() {
-                    priceFrom = value;
-                  });
-                },
-                onSaved: (value) {
-                  setState(() {
-                    priceFrom = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Điền đầy đủ thông tin";
-                  } else {
-                    return null;
-                  }
-                },
-                items: priceOptions
-                    .map((e) {
-                  return DropdownMenuItem(
-                    value: e['value'],
-                    child: Text(
-                      e['label'].toString(),
-                    ),
-                  );
-                }).toList(),
-              ),
+            const SizedBox(height: 8,),
+            const Text('Giá thấp nhất: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+            DropdownButtonFormField(
+              value: priceFrom,
+              isExpanded: true,
+              onChanged: (value) {
+                setState(() {
+                  priceFrom = value;
+                });
+              },
+              onSaved: (value) {
+                setState(() {
+                  priceFrom = value;
+                });
+              },
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Điền đầy đủ thông tin";
+                } else {
+                  return null;
+                }
+              },
+              items: priceOptions
+                  .map((e) {
+                return DropdownMenuItem(
+                  value: e['value'],
+                  child: Text(
+                    e['label'].toString(),
+                  ),
+                );
+              }).toList(),
+            ),
 
-              const SizedBox(height: 8,),
-              const Text('Giá cao nhất: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-              DropdownButtonFormField(
-                value: priceTo,
-                isExpanded: true,
-                onChanged: (value) {
-                  setState(() {
-                    priceTo = value;
-                  });
-                },
-                onSaved: (value) {
-                  setState(() {
-                    priceTo = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Điền đầy đủ thông tin";
-                  } else {
-                    return null;
-                  }
-                },
-                items: priceOptions
-                    .map((e) {
-                  return DropdownMenuItem(
-                    value: e['value'],
-                    child: Text(
-                      e['label'].toString(),
-                    ),
-                  );
-                }).toList(),
-              ),
+            const SizedBox(height: 8,),
+            const Text('Giá cao nhất: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+            DropdownButtonFormField(
+              value: priceTo,
+              isExpanded: true,
+              onChanged: (value) {
+                setState(() {
+                  priceTo = value;
+                });
+              },
+              onSaved: (value) {
+                setState(() {
+                  priceTo = value;
+                });
+              },
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Điền đầy đủ thông tin";
+                } else {
+                  return null;
+                }
+              },
+              items: priceOptions
+                  .map((e) {
+                return DropdownMenuItem(
+                  value: e['value'],
+                  child: Text(
+                    e['label'].toString(),
+                  ),
+                );
+              }).toList(),
+            ),
 
 
-              const SizedBox(height: 8,),
-              const Text('Phòng tắm: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-              DropdownButtonFormField(
-                value: bathRoomGte,
-                isExpanded: true,
-                onChanged: (value) {
-                  setState(() {
-                    bathRoomGte = value;
-                  });
-                },
-                onSaved: (value) {
-                  setState(() {
-                    bathRoomGte = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Điền đầy đủ thông tin";
-                  } else {
-                    return null;
-                  }
-                },
-                items: countOptions
-                    .map((e) {
-                  return DropdownMenuItem(
-                    value: e['value'],
-                    child: Text(
-                      e['label'].toString(),
-                    ),
-                  );
-                }).toList(),
-              ),
+            const SizedBox(height: 8,),
+            const Text('Phòng tắm: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+            DropdownButtonFormField(
+              value: bathRoomGte,
+              isExpanded: true,
+              onChanged: (value) {
+                setState(() {
+                  bathRoomGte = value;
+                });
+              },
+              onSaved: (value) {
+                setState(() {
+                  bathRoomGte = value;
+                });
+              },
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Điền đầy đủ thông tin";
+                } else {
+                  return null;
+                }
+              },
+              items: countOptions
+                  .map((e) {
+                return DropdownMenuItem(
+                  value: e['value'],
+                  child: Text(
+                    e['label'].toString(),
+                  ),
+                );
+              }).toList(),
+            ),
 
-              const SizedBox(height: 8,),
-              const Text('Phòng ngủ: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-              DropdownButtonFormField(
-                value: bedRoomGte,
-                isExpanded: true,
-                onChanged: (value) {
-                  setState(() {
-                    bedRoomGte = value;
-                  });
-                },
-                onSaved: (value) {
-                  setState(() {
-                    bedRoomGte = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Điền đầy đủ thông tin";
-                  } else {
-                    return null;
-                  }
-                },
-                items: countOptions
-                    .map((e) {
-                  return DropdownMenuItem(
-                    value: e['value'],
-                    child: Text(
-                      e['label'].toString(),
-                    ),
-                  );
-                }).toList(),
-              ),
+            const SizedBox(height: 8,),
+            const Text('Phòng ngủ: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+            DropdownButtonFormField(
+              value: bedRoomGte,
+              isExpanded: true,
+              onChanged: (value) {
+                setState(() {
+                  bedRoomGte = value;
+                });
+              },
+              onSaved: (value) {
+                setState(() {
+                  bedRoomGte = value;
+                });
+              },
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Điền đầy đủ thông tin";
+                } else {
+                  return null;
+                }
+              },
+              items: countOptions
+                  .map((e) {
+                return DropdownMenuItem(
+                  value: e['value'],
+                  child: Text(
+                    e['label'].toString(),
+                  ),
+                );
+              }).toList(),
+            ),
 
-              const SizedBox(height: 8,),
-              const Text('Bán kính: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-              DropdownButtonFormField(
-                value: distance,
-                isExpanded: true,
-                onChanged: (value) {
-                  setState(() {
-                    distance = value;
-                  });
-                },
-                onSaved: (value) {
-                  setState(() {
-                    distance = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Điền đầy đủ thông tin";
-                  } else {
-                    return null;
-                  }
-                },
-                items: distanceOptions
-                    .map((e) {
-                  return DropdownMenuItem(
-                    value: e['value'],
-                    child: Text(
-                      e['label'].toString(),
-                    ),
-                  );
-                }).toList(),
-              ),
-              const SizedBox(height: 12,),
-            ],
-          ),
-          const SizedBox(height: 12,),
-          const Text('Tìm kiếm', style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.w300)),
-          const SizedBox(height: 4,),
-        ],
-      ),
+            const SizedBox(height: 8,),
+            const Text('Bán kính: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+            DropdownButtonFormField(
+              value: distance,
+              isExpanded: true,
+              onChanged: (value) {
+                setState(() {
+                  distance = value;
+                });
+              },
+              onSaved: (value) {
+                setState(() {
+                  distance = value;
+                });
+              },
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Điền đầy đủ thông tin";
+                } else {
+                  return null;
+                }
+              },
+              items: distanceOptions
+                  .map((e) {
+                return DropdownMenuItem(
+                  value: e['value'],
+                  child: Text(
+                    e['label'].toString(),
+                  ),
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: 12,),
+          ],
+        ),
+        const SizedBox(height: 12,),
+        const Text('Tìm kiếm', style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.w300)),
+        const SizedBox(height: 4,),
+      ],
     );
   }
 
@@ -465,54 +471,10 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        leading: Padding(
-          padding: EdgeInsets.only(left: defaultPadding),
-          child: CircleAvatar(
-            backgroundColor: secondaryColor10LightTheme,
-            child: IconButton(
-              onPressed: () {
-                final HouseListParameter houseListParams = HouseListParameter(
-                  queryFor: 'map',
-                  queryType: 'distance',
-                  distance: double.parse(distance ?? '10'),
-                  polygonPoints: null,
-                  mapPoint: location ?? '105.804817,21.028511',
-                  showInvisible: false,
-                  pageSize: 5,
-                  pageNumber: 0,
-                  houseType: houseType != null ? int.parse(houseType!) : null,
-                  houseCategory: houseCategory != null ? int.parse(houseCategory!) : null,
-                  roomGte: roomGte != null ? int.parse(roomGte!) : null,
-                  bathRoomGte: bathRoomGte != null ? int.parse(bathRoomGte!) : null,
-                  bedRoomGte: bedRoomGte != null ? int.parse(bedRoomGte!) : null,
-                );
-                Navigator.of(context).push(scaleInTransition(MapScreen(houseListParameter: houseListParams)));
-              },
-              icon: const Icon(
-                Icons.near_me,
-                color: secondaryColor40LightTheme,
-                size: 24.0,
-                semanticLabel: 'Text to announce in accessibility modes',
-              ),
-            )
-          ),
-        ),
         title: const Text(
           "Bộ lọc tìm kiếm",
           style: TextStyle(color: textColorLightTheme),
         ),
-        actions: [
-          CircleAvatar(
-            backgroundColor: secondaryColor10LightTheme,
-            child: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(Icons.close, color: Colors.black),
-            ),
-          ),
-          const SizedBox(width: defaultPadding)
-        ],
       ),
       body: Container(
         height: double.infinity,
@@ -553,42 +515,67 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
                   thickness: 2,
                   color: secondaryColor10LightTheme,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(defaultPadding),
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      //  for testing let call the functon white press
-                      placeAutocomplete('dubai');
-                    },
-                    icon: const Icon(
-                      Icons.near_me,
-                      color: secondaryColor40LightTheme,
-                      size: 24.0,
-                      semanticLabel: 'Text to announce in accessibility modes',
-                    ),
-                    label: const Text("Sử dụng vị trí của tôi"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: secondaryColor10LightTheme,
-                      foregroundColor: textColorLightTheme,
-                      elevation: 0,
-                      fixedSize: const Size(double.infinity, 40),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                    ),
-                  ),
-                ),
-                const Divider(
-                  height: 2,
-                  thickness: 2,
-                  color: secondaryColor10LightTheme,
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.all(defaultPadding),
+                //   child: ElevatedButton.icon(
+                //     onPressed: () {
+                //       //  for testing let call the functon white press
+                //       placeAutocomplete('dubai');
+                //     },
+                //     icon: const Icon(
+                //       Icons.near_me,
+                //       color: secondaryColor40LightTheme,
+                //       size: 24.0,
+                //       semanticLabel: 'Text to announce in accessibility modes',
+                //     ),
+                //     label: const Text("Sử dụng vị trí của tôi"),
+                //     style: ElevatedButton.styleFrom(
+                //       backgroundColor: secondaryColor10LightTheme,
+                //       foregroundColor: textColorLightTheme,
+                //       elevation: 0,
+                //       fixedSize: const Size(double.infinity, 40),
+                //       shape: const RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.all(Radius.circular(10)),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // const Divider(
+                //   height: 2,
+                //   thickness: 2,
+                //   color: secondaryColor10LightTheme,
+                // ),
                 Expanded(
                   child: ListView.builder(
                     itemCount: placePredictions.length,
                     itemBuilder: (context, index) =>  LocationListTile(
                       press: () {
-                        // debugPrint(placePredictions[index]);
+                        GetGeoCodingRequest.fetchGeoCoding(placePredictions[index].placeId.toString()).then((value) {
+                          debugPrint(value.results![0]!.geometry?.location?.lat.toString());
+                          final HouseListParameter houseListParams = HouseListParameter(
+                            queryFor: 'map',
+                            queryType: 'distance',
+                            distance: double.parse(distance ?? '10'),
+                            polygonPoints: null,
+                            mapPoint: location ?? '${value.results![0]!.geometry?.location?.lng},${value.results![0]!.geometry?.location?.lat}',
+                            showInvisible: false,
+                            pageSize: 5,
+                            pageNumber: 0,
+                            houseType: houseType != null ? int.parse(houseType!) : null,
+                            houseCategory: houseCategory != null ? int.parse(houseCategory!) : null,
+                            roomGte: roomGte != null ? int.parse(roomGte!) : null,
+                            bathRoomGte: bathRoomGte != null ? int.parse(bathRoomGte!) : null,
+                            bedRoomGte: bedRoomGte != null ? int.parse(bedRoomGte!) : null,
+                          );
+                          if ( value.results![0]!.geometry?.location?.lat != null &&  value.results![0]!.geometry?.location?.lng != null) {
+                            Navigator.of(context).push(scaleInTransition(
+                              MapScreen(houseListParameter: houseListParams,
+                                latlng: LatLng(
+                                  value.results![0]!.geometry?.location?.lat as double,
+                                  value.results![0]!.geometry?.location?.lng as double,
+                                ),)));
+                          }
+                        });
                       },
                       location: placePredictions[index].description!,
                     )

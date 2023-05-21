@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zeehome/components/starRating.dart';
 import 'package:zeehome/model/user.dart';
+import 'package:zeehome/screens/following/followScreen.dart';
 import 'package:zeehome/screens/user/editUserDetailScreen.dart';
 import 'package:zeehome/utils/constants.dart';
 import 'package:intl/intl.dart';
@@ -26,7 +27,6 @@ class UserDetail extends StatelessWidget {
       child: Column(
         children: [
           Container(
-
             height: size.height * 0.25,
             child: Stack(
               children: <Widget>[
@@ -50,6 +50,24 @@ class UserDetail extends StatelessWidget {
                       bottomLeft: Radius.circular(25),
                       bottomRight: Radius.circular(25),
                     ),
+                  ),
+                ),
+                Positioned(
+                  top: 32,
+                  left: 12,
+                  child: CircleAvatar(
+                    backgroundColor: secondaryColor10LightTheme,
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: secondaryColor40LightTheme,
+                        size: 24.0,
+                        semanticLabel: 'Text to announce in accessibility modes',
+                      ),
+                    )
                   ),
                 ),
                 Positioned(
@@ -147,28 +165,57 @@ class UserDetail extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      //  for testing let call the functon white press
-                      Navigator.of(context).push(scaleInTransition(EditUserDetailScreen()));
-                    },
-                    icon: const Icon(
-                      Icons.near_me,
-                      color: secondaryColor40LightTheme,
-                      size: 24.0,
-                      semanticLabel: 'Text to announce in accessibility modes',
-                    ),
-                    label: const Text("Chỉnh sửa thông tin"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: secondaryColor10LightTheme,
-                      foregroundColor: textColorLightTheme,
-                      elevation: 0,
-                      fixedSize: const Size(double.infinity, 40),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                  Row(
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.of(context).push(scaleInTransition(EditUserDetailScreen()));
+                        },
+                        icon: const Icon(
+                          Icons.near_me,
+                          color: secondaryColor40LightTheme,
+                          size: 24.0,
+                          semanticLabel: 'Text to announce in accessibility modes',
+                        ),
+                        label: const Text("Chỉnh sửa"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: secondaryColor10LightTheme,
+                          foregroundColor: textColorLightTheme,
+                          minimumSize: const Size(100, 40),
+                          maximumSize: const Size(160, 40),
+                          elevation: 0,
+                          fixedSize: const Size(double.infinity, 40),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
+                      const SizedBox(width: 12,),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.of(context).push(scaleInTransition(const FollowingListScreen()));
+                        },
+                        icon: const Icon(
+                          Icons.favorite,
+                          color: secondaryColor40LightTheme,
+                          size: 24.0,
+                          semanticLabel: 'Text to announce in accessibility modes',
+                        ),
+                        label: const Text("Theo dõi"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: secondaryColor10LightTheme,
+                          foregroundColor: textColorLightTheme,
+                          minimumSize: const Size(100, 40),
+                          maximumSize: const Size(160, 40),
+                          elevation: 0,
+                          fixedSize: const Size(double.infinity, 40),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),
@@ -192,6 +239,7 @@ class UserDetail extends StatelessWidget {
               ),
             ),
           ),
+
         ],
       )
     );

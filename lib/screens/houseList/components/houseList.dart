@@ -27,7 +27,6 @@ class _HouseListState extends State<HouseList> {
     super.initState();
   }
 
-
   Future<void> _fetchPage(int pageKey) async {
     try {
       final newItems = await MyHouseListRequest.fetchMyHouseList(widget.ownerId, true, _pageSize, (pageKey ~/ _pageSize));
@@ -45,18 +44,40 @@ class _HouseListState extends State<HouseList> {
     }
   }
 
+  void refreshCallBack () {
+    _pagingController.refresh();
+  }
+
+  Widget noItemFoundIndicator() {
+    return(
+      Align(
+        alignment: Alignment.center,
+        child: Column(
+          children: const [
+            SizedBox(height: 32,),
+            Text('Không tìm thấy', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400, color: Colors.black),),
+            SizedBox(height: 18,),
+            Text('Danh sách tạm thời rỗng', style: TextStyle(fontSize: 14),),
+          ],
+        ),
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) => RefreshIndicator(
     onRefresh: () => Future.sync(
-          () => _pagingController.refresh(),
+      () => _pagingController.refresh(),
     ),
     child: PagedListView<int, House>.separated(
       pagingController: _pagingController,
       builderDelegate: PagedChildBuilderDelegate<House>(
         animateTransitions: true,
         itemBuilder: (context, item, index) {
-          return HouseItem(itemInfo: item);
+          return HouseItem(itemInfo: item, refreshCallBack: refreshCallBack,);
         },
+        noItemsFoundIndicatorBuilder: (_) => noItemFoundIndicator(),
+        // noMoreItemsIndicatorBuilder: (_) => NoMoreItemsIndicator(),
       ),
       separatorBuilder: (context, index) => const SizedBox(height: 0,),
     ),

@@ -2,24 +2,23 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:zeehome/model/houses/house.dart';
-
 const String url = 'https://huydt.online/api/houses';
 
-class CreateHouseRequest {
+class UpdateHouseRequest {
 
-  static Future<bool> fetchCreateHouse(String access_token, House houseInfo ) async {
-    debugPrint(houseInfo.toString());
-    final response = await http.post(
-      Uri.parse(url),
+  static Future<bool> fetchUpdateHouse(String access_token, House houseInfo ) async {
+    debugPrint(houseInfo.rooms.toString());
+    final response = await http.put(
+      Uri.parse('https://huydt.online/api/houses/${houseInfo.houseId}'),
       body: jsonEncode({
-        'latitude': houseInfo.latitude,
-        'longitude': houseInfo.longitude,
+        // 'latitude': houseInfo.latitude,
+        // 'longitude': houseInfo.longitude,
         'title': houseInfo.title,
         'description': houseInfo.description,
-        'address': houseInfo.address,
-        'ward': houseInfo.ward,
-        'district': houseInfo.district,
-        'province': houseInfo.province,
+        // 'address': houseInfo.address,
+        // 'ward': houseInfo.ward,
+        // 'district': houseInfo.district,
+        // 'province': houseInfo.province,
         'houseType': houseInfo.houseType,
         'houseCategory': houseInfo.houseCategory,
         'price': houseInfo.price,
@@ -36,7 +35,6 @@ class CreateHouseRequest {
         'thumbnail': houseInfo.thumbnail,
         "video": houseInfo.video,
         'rooms': houseInfo.rooms,
-
       }),
       headers: <String, String> {
         'Content-Type': 'application/json',
@@ -56,13 +54,10 @@ class CreateHouseRequest {
       return true;
     } else if (response.statusCode == 404) {
       throw Exception('Not Found');
-      return false;
     } else if (response.statusCode == 401) {
       throw Exception('unauthorized');
-      return false;
     } else {
       throw Exception('Can\'t not get posts');
-      return false;
     }
   }
 }

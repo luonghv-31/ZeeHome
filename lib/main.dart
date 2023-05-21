@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:zeehome/model/authProvider.dart';
 import 'package:zeehome/model/chat/chatModel.dart';
@@ -8,7 +9,7 @@ import 'screens/login/loginScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 class MyApp extends StatelessWidget {

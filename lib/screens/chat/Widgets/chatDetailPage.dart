@@ -37,8 +37,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     super.dispose();
   }
 
-  void handleSubmitChat (User myInfo) {
 
+  void handleSubmitChat (User myInfo) {
     Provider.of<ChatModel>(context, listen: false).sendTextMessage(
         chatTextController.text,
         From(sId: myInfo.userId, firstName: myInfo.firstName, lastName: myInfo.lastName),

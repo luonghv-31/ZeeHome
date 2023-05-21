@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 class AutocompletePrediction {
   /// [description] contains the human-readable name for the returned result. For establishment results, this is usually
   /// the business name.

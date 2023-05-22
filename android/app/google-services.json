@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "859884689750",
+    "firebase_url": "https://int3509-1-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "int3509-1",
+    "storage_bucket": "int3509-1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:859884689750:android:c691f6a79c09e1405a1ef7",
+        "android_client_info": {
+          "package_name": "com.example.zee_home"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "859884689750-3ovfpemkr464fe2lkh03rlumrvv4gavk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDO7uiJ0VO3EeuJxeq7EDcKHebrjyshOrE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "859884689750-3ovfpemkr464fe2lkh03rlumrvv4gavk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

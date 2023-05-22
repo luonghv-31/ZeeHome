@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:image_viewer/image_viewer.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zeehome/model/chat/ChatMessages.dart';
@@ -11,6 +10,7 @@ import 'package:zeehome/model/chat/chatUser.dart';
 import 'package:zeehome/model/user.dart';
 import 'package:zeehome/model/userProvider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 
 import '../../../network/uploadFile_request1.dart';
 
@@ -49,10 +49,10 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     }
   }
 
-  bool check_img(String input) {
+  bool check_img(String imgURL) {
     final matcher = new RegExp(
         r"(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)");
-    return matcher.hasMatch(input);
+    return matcher.hasMatch(imgURL);
   }
 
   @override
@@ -63,6 +63,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   void handleSubmitChat(User myInfo) {
     if (imgURL != null) {
+      print(chatTextController);
       Provider.of<ChatModel>(context, listen: false).sendImageMessage(
           chatTextController.text,
           imgURL!,
@@ -92,12 +93,13 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   }
 
   String? token;
+  dynamic image;
+  String pathIMG = '';
 
   final ImagePicker _picker = ImagePicker();
 
   void myValueSetter(int progress) {
-    EasyLoading.showProgress((progress / 100),
-        status: 'Đang tải ảnh lên: $progress%');
+    EasyLoading.showProgress((progress / 100), status: 'Đang tải ảnh lên: $progress%');
   }
 
   String? imgURL;
@@ -105,9 +107,17 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     EasyLoading.dismiss();
     setState(() {
       imgURL = imageKey;
-      print(imgURL);
     });
   }
+
+  bool checkImage() {
+    if (image != null) {
+      return true;
+    }
+    return false;
+  }
+
+  bool showIMG = false;
 
   @override
   Widget build(BuildContext context) {
@@ -233,18 +243,15 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                                     height: 150,
                                   ),
                                   onTap: () {
-                                    ImageViewer.showImageSlider(
-                                      images: [
-                                       parseMessageBody(
-                                  chatModel.messages[index].body!)
-                                    ],
-                                    );
+                                    image = Image.network(parseMessageBody(
+                                            chatModel.messages[index].body!))
+                                        .image;
+                                    showImageViewer(context, image);
                                   },
                                 )
                               : Text(
                                   parseMessageBody(
-                                      chatModel.messages[index].body!),
-                                  // parseMessageBody(chatModel.messages[index].body!),
+                                      chatModel.messages[index].body!),                                  
                                   style: const TextStyle(
                                       color: Colors.black, fontSize: 15),
                                 ),
@@ -260,26 +267,34 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
               child: Container(
                 padding: const EdgeInsets.only(
                     left: 10, right: 10, bottom: 30, top: 0),
-                height: 70,
+                height: 80,
                 width: double.infinity,
                 color: Colors.white,
                 child: Row(
                   children: <Widget>[
                     GestureDetector(
                       onTap: () async {
-                        // String path = await getImagePath();
                         final XFile? image = await _picker.pickImage(
                             source: ImageSource.gallery);
                         if (image != null) {
-                          SharedPreferences.getInstance().then((prefs) {
+                           SharedPreferences.getInstance().then((prefs) {
                             String access_token =
                                 prefs.get('access_token') as String;
-                            print(access_token);
-                            UploadFileRequest.fetchUploadFile(access_token,
-                                'image', image, myValueSetter, setThumbnail);
+                                print(access_token);
+                             UploadFileRequest.fetchUploadFile(access_token,
+                                 'image', image, myValueSetter, setThumbnail);
                           });
-                        } else
+                          setState(() {
+                            showIMG = true;
+                            pathIMG = image.path;
+                          });
+                        } else {
                           print('chưa chọn ảnh');
+                          setState(() {
+                            showIMG = false;
+                            pathIMG = '';
+                          });
+                        }                        
                       },
                       child: Container(
                         height: 40,
@@ -303,10 +318,21 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                         controller: chatTextController,
                         minLines: 1,
                         maxLines: 5,
-                        decoration: const InputDecoration(
-                            hintText: "Nhập tin nhắn...",
-                            hintStyle: TextStyle(color: Colors.black54),
-                            border: InputBorder.none),
+                        decoration: InputDecoration(
+                          hintText: "Nhập tin nhắn...",
+                          hintStyle: TextStyle(color: Colors.black54),
+                          border: InputBorder.none,
+                          suffixIcon: showIMG
+                              ? Padding(
+                                  padding: const EdgeInsets.all(0.0),
+                                  child: Image.file(
+                                    File(pathIMG),
+                                    width: 40,
+                                    height: 40,
+                                    fit: BoxFit.fill,
+                                  ))
+                              : null,
+                        ),
                       ),
                     ),
                     const SizedBox(
@@ -314,7 +340,11 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     ),
                     FloatingActionButton(
                       onPressed: () {
-                        handleSubmitChat(userProvider.getUserObj());
+                        setState(() {
+                          showIMG = false;
+                        });
+                       
+                       handleSubmitChat(userProvider.getUserObj());
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           if (_scrollController.hasClients) {
                             _scrollController.animateTo(

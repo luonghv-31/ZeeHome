@@ -51,6 +51,7 @@ class _ConversationListState extends State<ConversationList> {
       physics: NeverScrollableScrollPhysics(),
       
   child: TextButton(    
+    
     onPressed: () {
      
       SharedPreferences.getInstance().then((prefs) {
@@ -89,7 +90,7 @@ class _ConversationListState extends State<ConversationList> {
                       children: <Widget>[
                         Text(
                           widget.name,
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: 16, color: Colors.black),
                         ),
                         const SizedBox(
                           height: 6,
@@ -116,6 +117,7 @@ class _ConversationListState extends State<ConversationList> {
           Text(
             dateTime(widget.time),
             style: TextStyle(
+              color: Colors.black,
                 fontSize: 12,
                 fontWeight: widget.isMessageRead
                     ? FontWeight.bold

@@ -24,6 +24,11 @@ class _ChatPageState extends State<ChatPage> {
     return result['text'].toString();
   }
 
+  void initState(){
+    Provider.of<ChatModel>(context, listen: false).getChatWith();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ChatModel>(builder: (context, chatModelProvider, child) {

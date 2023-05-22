@@ -30,16 +30,36 @@ void _scrollBottom() {
   print('okk');
 }
 
+
+
 class _ChatDetailPageState extends State<ChatDetailPage> {
+
+
+ Future<void> _initStateAsync() async {
+    await Future.delayed(Duration.zero);
+   
+                          if (_scrollController.hasClients) {
+                            _scrollController.animateTo(
+                              _scrollController.position.maxScrollExtent,
+                              curve: Curves.easeOut,
+                              duration: const Duration(milliseconds: 10),
+                            );
+                          }                        ;
+    print('Init complete!');
+  }
+
   @override
   void initState() {
     // TODO: implement initState
+    Provider.of<ChatModel>(context, listen: false).getChatWith();
     Provider.of<ChatModel>(context, listen: false)
         .getChatHistory(widget.chatUser.userId);
+         _initStateAsync();
     super.initState();
- WidgetsBinding.instance!.addPostFrameCallback((_) {
-      _scrollBottom();
-    });
+//  WidgetsBinding.instance!.addPostFrameCallback((_) {
+//       _scrollBottom();
+//     });
+
   }
 
   TextEditingController chatTextController = TextEditingController();

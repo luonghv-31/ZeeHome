@@ -37,12 +37,6 @@ class _ConversationListState extends State<ConversationList> {
 
   
 
- @override
-  void dispose() {
-    
-    
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {

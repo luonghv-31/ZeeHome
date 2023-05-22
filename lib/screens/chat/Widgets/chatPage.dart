@@ -9,9 +9,9 @@ class ChatPage extends StatefulWidget {
   _ChatPageState createState() => _ChatPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
 
-  String parseImage (String? imageUrl) {
+class _ChatPageState extends State<ChatPage> {
+  String parseImage(String? imageUrl) {
     if (imageUrl != null) {
       final splitted = imageUrl.split('/');
       return 'https://d38jr024nxkzmx.cloudfront.net/${splitted[3]}';
@@ -60,11 +60,18 @@ class _ChatPageState extends State<ChatPage> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return ConversationList(
-                    name: '${chatModelProvider.chatWiths[index].info?.firstName} ${chatModelProvider.chatWiths[index].info?.lastName}',
-                    messageText: parseMessageBody(chatModelProvider.chatWiths[index].message!),
-                    imageUrl: parseImage(chatModelProvider.chatWiths[index].info?.image),
-                    time: chatModelProvider.chatWiths[index].lastTimeCommunicate.toString(),
-                    isMessageRead: (index == 0 || index == 3) ? true : false,
+                    name:
+                        '${chatModelProvider.chatWiths[index].info?.firstName} ${chatModelProvider.chatWiths[index].info?.lastName}',
+                    messageText: parseMessageBody(
+                        chatModelProvider.chatWiths[index].message!),
+                    imageUrl: parseImage(
+                        chatModelProvider.chatWiths[index].info?.image),
+                    time: chatModelProvider.chatWiths[index].lastTimeCommunicate
+                        .toString(),
+                    isMessageRead:
+                        (chatModelProvider.chatWiths[index].unRead! > 0)
+                            ? true
+                            : false,
                     userId: '${chatModelProvider.chatWiths[index].info?.sId}',
                   );
                 },

@@ -33,6 +33,7 @@ dependencies:
   firebase_core: ^2.13.0
   image_picker: ^0.8.7+5
   easy_image_viewer: ^1.2.0
+  image_viewer: ^1.5.0
 
 dev_dependencies:
   flutter_test:

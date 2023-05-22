@@ -295,8 +295,9 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   });
   }
+
   Widget buildAccout() {
-  return GestureDetector(
+    return GestureDetector(
     onTap: () => print('Ok'),
     child: RichText(
       text: TextSpan(
@@ -323,7 +324,7 @@ class _LoginScreenState extends State<LoginScreen> {
       
     ),
   );
-}
+  }
 
   @override
   Widget build(BuildContext context) {

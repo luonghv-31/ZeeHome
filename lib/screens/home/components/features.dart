@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zeehome/model/chat/chatModel.dart';
+import 'package:zeehome/network/fcm/set_fcm_token.dart';
 import 'package:zeehome/screens/createHouse/createHouseScreen.dart';
 import 'package:zeehome/screens/houseList/houseListScreen.dart';
 import 'package:zeehome/screens/payment/paymentScreen.dart';
@@ -36,7 +37,15 @@ class _FeaturesState extends State<Features> {
     debugPrint('check run');
     SharedPreferences.getInstance().then((prefs) {
       String access_token = prefs.get('access_token') as String;
+      String fcm_token = prefs.get('fcm_token') as String;
+      // init chatmodel here
       Provider.of<ChatModel>(context, listen: false).init(access_token);
+
+      debugPrint('${fcm_token} fcm token here');
+      if (fcm_token != null) {
+        SetFcmTokenRequest.fetchSetFcmToken(access_token, fcm_token);
+      }
+      // set fcm token here
     });
     super.initState();
   }

@@ -36,7 +36,6 @@ class CreateHouseRequest {
         'thumbnail': houseInfo.thumbnail,
         "video": houseInfo.video,
         'rooms': houseInfo.rooms,
-
       }),
       headers: <String, String> {
         'Content-Type': 'application/json',

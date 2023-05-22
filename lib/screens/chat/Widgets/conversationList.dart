@@ -24,7 +24,7 @@ class ConversationList extends StatefulWidget {
   @override
   _ConversationListState createState() => _ConversationListState();
 }
-ScrollController _scrollController1 = new ScrollController();
+ScrollController _scrollController = new ScrollController();
 
 
 class _ConversationListState extends State<ConversationList> {
@@ -47,7 +47,7 @@ class _ConversationListState extends State<ConversationList> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      controller: _scrollController1,
+     // controller: _scrollController,
       physics: NeverScrollableScrollPhysics(),
       
   child: TextButton(    
@@ -62,6 +62,7 @@ class _ConversationListState extends State<ConversationList> {
                       MaterialPageRoute(builder: (context) {
                     return ChatDetailPage(
                       chatUser: value,
+                      
                     );
                   }))
                 });

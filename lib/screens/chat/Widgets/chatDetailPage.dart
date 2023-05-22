@@ -16,6 +16,7 @@ import '../../../network/uploadFile_request1.dart';
 
 class ChatDetailPage extends StatefulWidget {
   ChatUser chatUser;
+  
   ChatDetailPage({super.key, required this.chatUser});
 
   @override
@@ -25,7 +26,7 @@ class ChatDetailPage extends StatefulWidget {
 ScrollController _scrollController = new ScrollController();
 void _scrollBottom() {
   _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-      duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+      duration: Duration(milliseconds: 1), curve: Curves.easeOut);
   print('okk');
 }
 
@@ -36,6 +37,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     Provider.of<ChatModel>(context, listen: false)
         .getChatHistory(widget.chatUser.userId);
     super.initState();
+ WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _scrollBottom();
+    });
   }
 
   TextEditingController chatTextController = TextEditingController();
@@ -64,6 +68,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   void handleSubmitChat(User myInfo) {
     if (imgURL != null) {
       print(chatTextController);
+      print(imgURL);
       Provider.of<ChatModel>(context, listen: false).sendImageMessage(
           chatTextController.text,
           imgURL!,

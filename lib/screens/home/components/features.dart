@@ -1,4 +1,6 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zeehome/model/chat/chatModel.dart';
@@ -9,6 +11,8 @@ import 'package:zeehome/screens/payment/paymentScreen.dart';
 import 'package:zeehome/screens/user/userDetailScreen.dart';
 import 'package:zeehome/utils/constants.dart';
 import 'package:zeehome/screens/chat/chatScreen.dart';
+
+
 class Features extends StatefulWidget {
 
   final Size size;
@@ -34,7 +38,7 @@ class _FeaturesState extends State<Features> {
 
   @override void initState() {
     // TODO: implement initState
-    debugPrint('check run');
+
     SharedPreferences.getInstance().then((prefs) {
       String access_token = prefs.get('access_token') as String;
       String fcm_token = prefs.get('fcm_token') as String;

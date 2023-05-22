@@ -22,9 +22,14 @@ void initInfo() {
   const LinuxInitializationSettings initializationSettingsLinux =
   LinuxInitializationSettings(
       defaultActionName: 'Open notification');
+  const DarwinInitializationSettings initializationSettingsDarwin = DarwinInitializationSettings(
+
+  );
   const InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
-      linux: initializationSettingsLinux
+      linux: initializationSettingsLinux,
+      iOS: initializationSettingsDarwin,
+      
   );
 
 
@@ -41,8 +46,12 @@ void initInfo() {
     AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails('dbfood', 'dbfood', importance: Importance.high,
       styleInformation: bigTextStyleInformation, priority: Priority.high, playSound: true,
     );
+    DarwinNotificationDetails darwinNotificationDetails = DarwinNotificationDetails(
+      
 
-    NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
+    );
+
+    NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails, iOS: darwinNotificationDetails);
 
     await flutterLocalNotificationsPlugin.show(0, 'this is title', 'this is body',
         notificationDetails, payload: 'this is payload'
@@ -62,9 +71,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   const LinuxInitializationSettings initializationSettingsLinux =
   LinuxInitializationSettings(
       defaultActionName: 'Open notification');
+      const DarwinInitializationSettings initializationSettingsDarwin = DarwinInitializationSettings();
   const InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
-      linux: initializationSettingsLinux
+      linux: initializationSettingsLinux,
+      iOS: initializationSettingsDarwin
   );
 
 
@@ -79,8 +90,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails('dbfood', 'dbfood', importance: Importance.high,
     styleInformation: bigTextStyleInformation, priority: Priority.high, playSound: true,
   );
-
-  NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
+ DarwinNotificationDetails darwinNotificationDetails = DarwinNotificationDetails();
+  NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails, iOS: darwinNotificationDetails);
 
   await flutterLocalNotificationsPlugin.show(0, 'this is title', 'this is body',
       notificationDetails, payload: 'this is payload'

@@ -51,7 +51,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   @override
   void initState() {
     // TODO: implement initState
-    Provider.of<ChatModel>(context, listen: false).getChatWith();
+    
     Provider.of<ChatModel>(context, listen: false)
         .getChatHistory(widget.chatUser.userId);
          _initStateAsync();

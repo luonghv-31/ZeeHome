@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zeehome/model/authProvider.dart';
 import 'package:zeehome/model/chat/chatModel.dart';
@@ -12,22 +15,85 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
+void initInfo() {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+  const LinuxInitializationSettings initializationSettingsLinux =
+  LinuxInitializationSettings(
+      defaultActionName: 'Open notification');
+  const InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      linux: initializationSettingsLinux
+  );
+
+
+  flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+  //foreground
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    var body = jsonDecode(message.data['body']);
+    BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
+      '${body['text']}', htmlFormatBigText: true,
+      contentTitle: '<b>Tín nhắn từ ${message.data['fromFirstName']} ${message.data['fromLastName']}</b>', htmlFormatContentTitle: true,
+    );
+
+    AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails('dbfood', 'dbfood', importance: Importance.high,
+      styleInformation: bigTextStyleInformation, priority: Priority.high, playSound: true,
+    );
+
+    NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
+
+    await flutterLocalNotificationsPlugin.show(0, 'this is title', 'this is body',
+        notificationDetails, payload: 'this is payload'
+    );
+    if (message.notification != null) {
+      print('Message also contained a notification: ${message.notification}');
+    }
+  });
+}
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
+
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+  const LinuxInitializationSettings initializationSettingsLinux =
+  LinuxInitializationSettings(
+      defaultActionName: 'Open notification');
+  const InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      linux: initializationSettingsLinux
+  );
+
+
+  flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+  var body = jsonDecode(message.data['body']);
+  BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
+    '${body['text']}', htmlFormatBigText: true, htmlFormatTitle: true,
+    contentTitle: '<b>Tín nhắn từ ${message.data['fromFirstName']} ${message.data['fromLastName']}</b>', htmlFormatContentTitle: true,
+  );
+
+  AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails('dbfood', 'dbfood', importance: Importance.high,
+    styleInformation: bigTextStyleInformation, priority: Priority.high, playSound: true,
+  );
+
+  NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
+
+  await flutterLocalNotificationsPlugin.show(0, 'this is title', 'this is body',
+      notificationDetails, payload: 'this is payload'
+  );
+  if (message.notification != null) {
+    print('Message also contained a notification: ${message.notification}');
+  }
+
 
   print("Handling a background message: ${message.messageId}");
 }
 
-void main() async {
-
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
+void requestPermission() async {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   messaging.getToken().then((value) {
     SharedPreferences.getInstance().then((prefs) {
@@ -45,22 +111,23 @@ void main() async {
     sound: true,
   );
   print('User granted permission: ${settings.authorizationStatus}');
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  requestPermission();
+  initInfo();
 
   // background
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  //foreground
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Got a message whilst in the foreground!');
-    print('Message data: ${message.data}');
-
-    if (message.notification != null) {
-      print('Message also contained a notification: ${message.notification}');
-    }
-  });
-
   runApp(const MyApp());
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -80,3 +147,5 @@ class MyApp extends StatelessWidget {
     ));
   }
 }
+
+

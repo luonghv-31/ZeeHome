@@ -4,20 +4,17 @@ import 'dart:convert';
 const String url = 'https://huydt.online/api/auth/reset';
 
 class ResetPass {
-  static sendEmail(String email) async{
-    Map data = {
-      'email': email
-    };
-    final response = await http.post(
-      Uri.parse(url),     
-      headers:  {
-        "Content-Type":"application/json"
-      },
-       body: jsonEncode(data),
-       encoding: Encoding.getByName('utf-8')
-    );
+  static sendEmail(String email) async {
+    Map data = {'email': email};
+    final response = await http
+        .post(Uri.parse(url),
+            headers: {"Content-Type": "application/json"},
+            body: jsonEncode(data),
+            encoding: Encoding.getByName('utf-8'))
+        .timeout(
+          const Duration(seconds: 10),
+        );
     print(response.statusCode);
-    return response;
+    return response.statusCode;
   }
 }
-

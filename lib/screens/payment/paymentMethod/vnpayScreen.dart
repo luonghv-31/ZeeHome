@@ -71,13 +71,16 @@ class _VnpayScreenState extends State<VnpayScreen> {
                     ),
                     const SizedBox(height: 20,),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         debugPrint(amountController.text);
+                        
                         if (_formKey.currentState!.validate()) {
                           GetVnpayRequest.fetchVnPay(authProvider.accessToken, int.parse(amountController.text) * 100, 'string').then((value) => {
-                            _launchUrl(value),
+                            _launchUrl(value),                            
                           });
+                          
                         }
+                         await closeInAppWebView();
                       },
                       child: const Text('Tiếp tục', style: TextStyle(color: Colors.white)),
                     ),

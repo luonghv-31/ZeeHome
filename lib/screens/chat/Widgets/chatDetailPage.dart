@@ -31,20 +31,18 @@ void _scrollBottom() {
 }
 
 
-
 class _ChatDetailPageState extends State<ChatDetailPage> {
 
 
  Future<void> _initStateAsync() async {
     await Future.delayed(Duration.zero);
-   
-                          if (_scrollController.hasClients) {
-                            _scrollController.animateTo(
-                              _scrollController.position.maxScrollExtent,
-                              curve: Curves.easeOut,
-                              duration: const Duration(milliseconds: 10),
-                            );
-                          }                        ;
+        if (_scrollController.hasClients) {
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent,
+            curve: Curves.easeOut,
+            duration: const Duration(milliseconds: 10),
+          );
+        };
     print('Init complete!');
   }
 

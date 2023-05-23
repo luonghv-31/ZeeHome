@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -7,10 +8,12 @@ import 'package:zeehome/model/chat/ChatMessages.dart';
 import 'package:zeehome/model/chat/chatDetail.dart';
 import 'package:zeehome/model/chat/chatWithUsers.dart';
 
+
 class ChatModel with ChangeNotifier {
   List<ChatWith> chatWiths = [];
   List<Messages> messages = [];
 
+ bool hasChanged = false; 
 
   late IO.Socket socket;
 
@@ -29,7 +32,7 @@ class ChatModel with ChangeNotifier {
       socket.emit('FE_get_chat_with', {});
     });
 
-    // socket.on('event', (data) => print(data));
+   
     socket.on('FE_receive_message', (data) {
       ChatDetail chatDetail = ChatDetail.fromJson(data);
       Messages newMessage = Messages(
@@ -37,14 +40,18 @@ class ChatModel with ChangeNotifier {
           to: chatDetail.chat?.to,
           body: chatDetail.chat?.body,
           createAt: chatDetail.chat?.createAt);
-      messages.add(newMessage);
+      messages.add(newMessage);    
+  
+    hasChanged =true;
       getChatWith();  
+      
       notifyListeners();
     });
 
     socket.on('FE_receive_history_chat', (data) {
       ChatMessages chatMessages = ChatMessages.fromJson(data);
       messages = chatMessages.messages!.reversed.toList();
+      hasChanged =true ;
 
       notifyListeners();
     });

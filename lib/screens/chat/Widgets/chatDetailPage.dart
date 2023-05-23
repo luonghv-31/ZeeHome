@@ -30,19 +30,9 @@ void _scrollBottom() {
   print('okk');
 }
 
-class _ChatDetailPageState extends State<ChatDetailPage> {
-  Future<void> _initStateAsync() async {
-    await Future.delayed(Duration.zero);
 
-    if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        curve: Curves.easeOut,
-        duration: const Duration(milliseconds: 10),
-      );
-    }
-    print('Init complete!');
-  }
+class _ChatDetailPageState extends State<ChatDetailPage> {
+
 
   @override
   void initState() {
@@ -50,11 +40,10 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
     Provider.of<ChatModel>(context, listen: false)
         .getChatHistory(widget.chatUser.userId);
-    _initStateAsync();
+   
     super.initState();
-//  WidgetsBinding.instance!.addPostFrameCallback((_) {
-//       _scrollBottom();
-//     });
+
+
   }
 
   TextEditingController chatTextController = TextEditingController();
@@ -144,15 +133,16 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   Widget build(BuildContext context) {
     return Consumer2<ChatModel, UserProvider>(
         builder: (context, chatModel, userProvider, child) {
-      // if (chatModel.hasListeners) {
-      //   WidgetsBinding.instance.addPostFrameCallback((_) {
-      //     _scrollController.animateTo(
-      //       _scrollController.position.maxScrollExtent,
-      //       duration: Duration(milliseconds: 300),
-      //       curve: Curves.easeOut,
-      //     );
-      //   });
-      // }
+          print(chatModel.hasChanged);
+     if (chatModel.hasChanged) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      });
+    }
       return Scaffold(
         appBar: AppBar(
           elevation: 0,

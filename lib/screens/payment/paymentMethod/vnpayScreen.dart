@@ -30,10 +30,11 @@ class _VnpayScreenState extends State<VnpayScreen> {
     super.dispose();
   }
 
-
-  Future<void> _launchUrl(String url) async {
-    final uri = Uri.parse(url);
-    if (!await launchUrl(uri)) {
+  Future<void> launchUrl2(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
       throw Exception('Could not launch $url');
     }
   }
@@ -76,7 +77,8 @@ class _VnpayScreenState extends State<VnpayScreen> {
                         
                         if (_formKey.currentState!.validate()) {
                           GetVnpayRequest.fetchVnPay(authProvider.accessToken, int.parse(amountController.text) * 100, 'string').then((value) => {
-                            _launchUrl(value),                            
+                            // _launchUrl(value),
+                            launchUrl2(Uri.parse(value))
                           });
                           
                         }

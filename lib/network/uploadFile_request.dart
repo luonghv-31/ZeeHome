@@ -9,7 +9,6 @@ const String progressUrl = 'http://103.162.20.167/api/progress';
 const String postFileUrl = 'https://huydt.online/api/file/';
 
 class UploadFileRequest {
-
   static Future<void> fetchUploadFile(String access_token, String fileType, PlatformFile file, final ValueSetter<int> myValueSetter, final ValueSetter<String> getImageKey) async {
     EventSource eventSource = await EventSource.connect(progressUrl, headers: {
       'Authorization': 'Bearer $access_token',

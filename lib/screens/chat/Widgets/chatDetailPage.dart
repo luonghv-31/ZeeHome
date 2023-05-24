@@ -53,6 +53,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     Provider.of<ChatModel>(context, listen: false)
         .getChatHistory(widget.chatUser.userId);
          _initStateAsync();
+
     super.initState();
 //  WidgetsBinding.instance!.addPostFrameCallback((_) {
 //       _scrollBottom();

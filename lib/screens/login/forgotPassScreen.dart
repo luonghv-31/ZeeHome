@@ -11,6 +11,8 @@ class forgotPass extends StatefulWidget {
 class _forgotPass extends State<forgotPass> {
   final inputEmailController = TextEditingController();
   bool _isShow = false;
+  bool unsuccessful = false;
+  bool pressSendbtn = false;
 
   Widget inputEmail() {
     return Column(
@@ -74,33 +76,110 @@ class _forgotPass extends State<forgotPass> {
   }
 
   Widget buildSendEmailBtn() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 25),
-      width: 170,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            elevation: 5,
-            padding: EdgeInsets.all(15),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-            backgroundColor: Color.fromARGB(255, 0, 106, 255)),
-        onPressed: () {
-          if (isValidEmail(inputEmailController.text) == true) {
-            setState(() {
-              _isShow = false;
-            });
-            ResetPass.sendEmail(inputEmailController.text);
-          } else
-            setState(() {
-              _isShow = true;
-            });
-        },
-        child: Text(
-          'Gửi Email',
-          style: TextStyle(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 100.0),
+          padding: EdgeInsets.symmetric(vertical: 25),
+          width: 170,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                elevation: 5,
+                padding: EdgeInsets.all(15),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6)),
+                backgroundColor: Color.fromARGB(255, 0, 106, 255)),
+            onPressed: () {
+              if (isValidEmail(inputEmailController.text) == true) {
+                setState(() {
+                  _isShow = false;
+                  pressSendbtn = true;
+                  unsuccessful = false;
+                });
+                sendMail();
+              } else {
+                setState(() {
+                  _isShow = true;
+                });
+              }
+            },
+            child: pressSendbtn
+                ? CircularProgressIndicator(
+                    color: Colors.white,
+                  )
+                : const Text(
+                    'Gửi Email',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600),
+                  ),
+          ),
         ),
-      ),
+        Container(
+          margin: EdgeInsets.symmetric(vertical: 1.0, horizontal: 90.0),
+          child: Visibility(
+            visible: unsuccessful,
+            child: const Text(
+              'Gửi Email thất bại',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  height: 1.25,
+                  fontSize: 18,
+                  color: Color.fromARGB(255, 255, 255, 255),
+                  fontWeight: FontWeight.w500),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void sendMail() async {
+    try {
+      int statusCode = await ResetPass.sendEmail(inputEmailController.text);
+
+      if (statusCode == 200) {
+        setState(() {
+          showAlertDialog(context);
+          pressSendbtn = false;
+        });
+      } else {
+        setState(() {
+          pressSendbtn = false;
+          unsuccessful = true;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        unsuccessful = true;
+        pressSendbtn = false;
+      });
+    }
+  }
+
+  showAlertDialog(BuildContext context) {
+    Widget okButton = TextButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    AlertDialog alert = AlertDialog(
+      title: Text("Thông báo"),
+      content: Text("Gửi Email đặt lại mật khẩu thành công."),
+      actions: [
+        okButton,
+      ],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 

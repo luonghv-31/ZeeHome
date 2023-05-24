@@ -5,6 +5,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:zeehome/network/signup_request.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:zeehome/screens/login/loginScreen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -23,10 +24,9 @@ class _SignUpScreen extends State<SignUpScreen> {
   final dateOfBirthController = TextEditingController();
   final passWordController = TextEditingController();
   final rePassController = TextEditingController();
-  
 
   bool fullNameError = false;
-  bool phoneError = false; 
+  bool phoneError = false;
   bool emailError = false;
   bool genderError = false;
   bool dateOfBirthError = false;
@@ -36,9 +36,28 @@ class _SignUpScreen extends State<SignUpScreen> {
   bool rePassError2 = false;
   bool showPass = true;
   bool showRePass = true;
-  
+  bool timeOut = false;
+  bool unsuccessful = false;
+  bool pressSignIn = false;
 
   var _dropDownValue = null;
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the
+    // widget tree.
+    fullNameController.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
+    phoneNumberController.dispose();
+    emailController.dispose();
+    genderController.dispose();
+    dateOfBirthController.dispose();
+    passWordController.dispose();
+    rePassController.dispose();
+    super.dispose();
+  }
+
   Widget fullName() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,7 +214,6 @@ class _SignUpScreen extends State<SignUpScreen> {
       ],
     );
   }
-
 
   Widget gender_Birth() {
     return Row(
@@ -458,30 +476,140 @@ class _SignUpScreen extends State<SignUpScreen> {
   }
 
   Widget signInbtn() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 25),
-      width: 170,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            elevation: 5,
-            padding: EdgeInsets.all(15),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-            backgroundColor: Color.fromARGB(255, 0, 106, 255)),
-        onPressed: () {
-          checkAllField(fullNameController.text, emailController.text, phoneNumberController.text, 
-          genderController.text, dateOfBirthController.text, 
-          passWordController.text, rePassController.text) ? SignUpRequest.createAcount(genderController.text, phoneNumberController.text, 
-          dateOfBirthController.text, firstNameController.text, lastNameController.text, emailController.text, passWordController.text) : '';
-        },
-        child: Text(
-          'Đăng ký',
-          style: TextStyle(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.symmetric(
+              vertical: 10.0,
+              horizontal: 100.0), // Khoảng cách 10.0 đứng và 20.0 ngang
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              elevation: 5,
+              padding: EdgeInsets.all(15),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6)),
+              backgroundColor: Color.fromARGB(255, 0, 106, 255),
+            ),
+            onPressed: () {
+              checkAllField(
+                fullNameController.text,
+                emailController.text,
+                phoneNumberController.text,
+                genderController.text,
+                dateOfBirthController.text,
+                passWordController.text,
+                rePassController.text,
+              )
+                  ? signUpButtonPressed()
+                  : '';
+            },
+            child: pressSignIn
+                ? CircularProgressIndicator(
+                    color: Colors.white,
+                  )
+                : const Text(
+                    'Đăng ký',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+          ),
         ),
-      ),
+        Container(
+            margin: EdgeInsets.only(left: 80),
+            child: Visibility(
+              visible: unsuccessful,
+              child: const Text(
+                'Tài khoản đã tồn tại!',
+                style: TextStyle(
+                    height: 1.25,
+                    fontSize: 18,
+                    color: Colors.red,
+                    fontWeight: FontWeight.w500),
+              ),
+            )),
+        Container(
+          margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 90.0),
+          child: Visibility(
+            visible: timeOut,
+            child: const Text(
+              'Hết thời gian chờ!',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  height: 1.25,
+                  fontSize: 18,
+                  color: Colors.red,
+                  fontWeight: FontWeight.w500),
+            ),
+          ),
+        ),
+      ],
     );
   }
+
+  void signUpButtonPressed() async {
+    setState(() {
+      pressSignIn = true;
+      unsuccessful = false;
+      timeOut = false;
+    });
+
+    try {
+      int statusCode = await SignUpRequest.createAcount(
+          genderController.text,
+          phoneNumberController.text,
+          dateOfBirthController.text,
+          firstNameController.text,
+          lastNameController.text,
+          emailController.text,
+          passWordController.text);
+
+      if (statusCode == 200) {
+        setState(() {
+          showAlertDialog(context);
+          pressSignIn = false;
+        });
+      } else {
+        setState(() {
+          unsuccessful = true;
+          pressSignIn = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        timeOut = true;
+        pressSignIn = false;
+      });
+    }
+  }
+
+  showAlertDialog(BuildContext context) {
+    Widget okButton = TextButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    AlertDialog alert = AlertDialog(
+      title: Text("Thông báo"),
+      content: Text("Đăng kí tài khoản thành công."),
+      actions: [
+        okButton,
+      ],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
 // ẩn hiện mật khẩu
   Widget showHidePass() {
     return IconButton(
@@ -500,7 +628,7 @@ class _SignUpScreen extends State<SignUpScreen> {
     return IconButton(
       onPressed: () {
         setState(() {
-          showRePass =! showRePass;
+          showRePass = !showRePass;
         });
       },
       icon: showRePass ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
@@ -532,15 +660,15 @@ class _SignUpScreen extends State<SignUpScreen> {
       });
     }
     setState(() {
-        fullNameError = true;
-      });
+      fullNameError = true;
+    });
     return false;
   }
 
-  bool validateEmail(String t){
-   bool checkEmail = EmailValidator.validate(emailController.text);
+  bool validateEmail(String t) {
+    bool checkEmail = EmailValidator.validate(emailController.text);
 
-    if(checkEmail){
+    if (checkEmail) {
       setState(() {
         emailError = false;
       });
@@ -550,28 +678,26 @@ class _SignUpScreen extends State<SignUpScreen> {
       emailError = true;
     });
     return false;
-
   }
 
-  bool validatePhone(String t){
+  bool validatePhone(String t) {
     final regExp = RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)');
-    for(int i = 0; i < 2; i++){
-    if(t.length==10 && regExp.hasMatch(t)){
-      setState(() {
-        phoneError = false;
-      });
-      return true;
+    for (int i = 0; i < 2; i++) {
+      if (t.length == 10 && regExp.hasMatch(t)) {
+        setState(() {
+          phoneError = false;
+        });
+        return true;
       }
     }
     setState(() {
       phoneError = true;
     });
     return false;
-    
   }
 
-  bool validateGender(String t){
-    if(genderController.text.isNotEmpty){
+  bool validateGender(String t) {
+    if (genderController.text.isNotEmpty) {
       setState(() {
         genderError = false;
       });
@@ -583,8 +709,8 @@ class _SignUpScreen extends State<SignUpScreen> {
     return false;
   }
 
-  bool validateDateOfBirth(String t){
-     if(dateOfBirthController.text.isNotEmpty){
+  bool validateDateOfBirth(String t) {
+    if (dateOfBirthController.text.isNotEmpty) {
       setState(() {
         dateOfBirthError = false;
       });
@@ -596,76 +722,80 @@ class _SignUpScreen extends State<SignUpScreen> {
     return false;
   }
 
-
-bool validatePass(String t){
-   final regExp = RegExp('.{8,}');
-   if(t.isNotEmpty && regExp.hasMatch(t)){
-    setState(() {
-      passWordError = false;
-      emptyPass = false;
-    });
-    return true;
-   }else if(t.isEmpty){
-    setState(() {
-      emptyPass = true;
-    });
-    return false;
-   } else if(t.isNotEmpty && !regExp.hasMatch(t)){
-    setState(() {
-      passWordError = true;
-      emptyPass = false;
-    });
-    return false;
-   }  
-   return false;
-}
-
-bool validateRePass(String t, String s){
-  if(s.isNotEmpty && passWordController.text==rePassController.text){
-    setState(() {
-      rePassError1 = false;
-      rePassError2 = false;
-    });
-    return true;
-  } else if(s.isEmpty){
-    setState(() {
-      rePassError1 = true;
-      rePassError2 = false;
-    });
-    return false;
-  } else if((s.isNotEmpty && passWordController.text!=rePassController.text)){
-    setState(() {
-      rePassError1 = false;
-      rePassError2 = true;
-    });
-    return false;
-  }
-  return false;
-}
-
-bool checkAllField(String fullNameController, String emailController, String phoneNumberController,
-  String genderController, String dateOfBirthController, String passWordController, String rePassController){
-    validateFullName(fullNameController) ;
-    validateEmail(emailController);
-    validatePhone(phoneNumberController) ;
-    validateGender(genderController) ;
-    validateDateOfBirth(dateOfBirthController) ;
-    validatePass(passWordController) ;
-    validateRePass(passWordController, rePassController);
-    // kiem tra neu dung thi tra ve true;
-    if(validateFullName(fullNameController) == true &&
-    validateEmail(emailController) == true &&
-    validatePhone(phoneNumberController) == true &&
-    validateGender(genderController) == true &&
-    validateDateOfBirth(dateOfBirthController) == true &&
-    validatePass(passWordController) == true &&
-    validateRePass(passWordController, rePassController)){
+  bool validatePass(String t) {
+    final regExp = RegExp('.{8,}');
+    if (t.isNotEmpty && regExp.hasMatch(t)) {
+      setState(() {
+        passWordError = false;
+        emptyPass = false;
+      });
       return true;
+    } else if (t.isEmpty) {
+      setState(() {
+        emptyPass = true;
+      });
+      return false;
+    } else if (t.isNotEmpty && !regExp.hasMatch(t)) {
+      setState(() {
+        passWordError = true;
+        emptyPass = false;
+      });
+      return false;
     }
     return false;
   }
 
- 
+  bool validateRePass(String t, String s) {
+    if (s.isNotEmpty && passWordController.text == rePassController.text) {
+      setState(() {
+        rePassError1 = false;
+        rePassError2 = false;
+      });
+      return true;
+    } else if (s.isEmpty) {
+      setState(() {
+        rePassError1 = true;
+        rePassError2 = false;
+      });
+      return false;
+    } else if ((s.isNotEmpty &&
+        passWordController.text != rePassController.text)) {
+      setState(() {
+        rePassError1 = false;
+        rePassError2 = true;
+      });
+      return false;
+    }
+    return false;
+  }
+
+  bool checkAllField(
+      String fullNameController,
+      String emailController,
+      String phoneNumberController,
+      String genderController,
+      String dateOfBirthController,
+      String passWordController,
+      String rePassController) {
+    validateFullName(fullNameController);
+    validateEmail(emailController);
+    validatePhone(phoneNumberController);
+    validateGender(genderController);
+    validateDateOfBirth(dateOfBirthController);
+    validatePass(passWordController);
+    validateRePass(passWordController, rePassController);
+    // kiem tra neu dung thi tra ve true;
+    if (validateFullName(fullNameController) == true &&
+        validateEmail(emailController) == true &&
+        validatePhone(phoneNumberController) == true &&
+        validateGender(genderController) == true &&
+        validateDateOfBirth(dateOfBirthController) == true &&
+        validatePass(passWordController) == true &&
+        validateRePass(passWordController, rePassController)) {
+      return true;
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -726,7 +856,7 @@ bool checkAllField(String fullNameController, String emailController, String pho
                       SizedBox(height: 7),
                       rePassWord(),
                       SizedBox(height: 7),
-                      signInbtn()
+                      signInbtn(),
                     ]),
               ),
             ),

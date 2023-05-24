@@ -47,6 +47,6 @@ class SignUpRequest {
       },
     );
     debugPrint(response.statusCode.toString());
-    return response;
+    return response.statusCode;
   }
 }

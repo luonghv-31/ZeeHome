@@ -2,27 +2,29 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:zeehome/model/chat/ChatMessages.dart';
 import 'package:zeehome/model/chat/chatDetail.dart';
 import 'package:zeehome/model/chat/chatWithUsers.dart';
 
+
 class ChatModel with ChangeNotifier {
   List<ChatWith> chatWiths = [];
   List<Messages> messages = [];
 
+ bool hasChanged = false; 
+
   late IO.Socket socket;
-  
+
   void init(String access_token) {
-    socket = IO.io('https://huydt.online',
-        IO.OptionBuilder()
+    socket = IO.io(
+      'https://huydt.online',
+      IO.OptionBuilder()
           .setPath('/chat/socket.io')
           .enableAutoConnect()
-          .setTransports(['websocket'])
-          .setAuth({
-            "token": access_token
-          })
-          .build(),
+          .setTransports(['websocket']).setAuth(
+              {"token": access_token}).build(),
     );
 
     socket.onConnect((_) {
@@ -30,18 +32,27 @@ class ChatModel with ChangeNotifier {
       socket.emit('FE_get_chat_with', {});
     });
 
-    // socket.on('event', (data) => print(data));
+   
     socket.on('FE_receive_message', (data) {
       ChatDetail chatDetail = ChatDetail.fromJson(data);
-      Messages newMessage = Messages(from: chatDetail.chat?.from, to: chatDetail.chat?.to, body: chatDetail.chat?.body, createAt: chatDetail.chat?.createAt);
-      messages.add(newMessage);
-      getChatWith();
+      Messages newMessage = Messages(
+          from: chatDetail.chat?.from,
+          to: chatDetail.chat?.to,
+          body: chatDetail.chat?.body,
+          createAt: chatDetail.chat?.createAt);
+      messages.add(newMessage);    
+  
+    hasChanged =true;
+      getChatWith();  
+      
       notifyListeners();
     });
 
     socket.on('FE_receive_history_chat', (data) {
       ChatMessages chatMessages = ChatMessages.fromJson(data);
       messages = chatMessages.messages!.reversed.toList();
+      hasChanged =true ;
+
       notifyListeners();
     });
 
@@ -51,9 +62,11 @@ class ChatModel with ChangeNotifier {
       notifyListeners();
     });
 
-    socket.on('FE_reset_unread_done', (data) => {
-      debugPrint(data.toString()),
-    });
+    socket.on(
+        'FE_reset_unread_done',
+        (data) => {
+              debugPrint(data.toString()),
+            });
 
     // socket.onDisconnect((_) => print('disconnect'));
     // socket.on('fromServer', (_) => print(_));
@@ -69,7 +82,7 @@ class ChatModel with ChangeNotifier {
     });
   }
 
-  String getDate () {
+  String getDate() {
     debugPrint(DateTime.now().toString());
     return DateTime.now().toString();
   }
@@ -83,14 +96,15 @@ class ChatModel with ChangeNotifier {
       "to": toUser.sId,
       "body": body,
     });
-    messages.add(Messages(from: fromUser, to: toUser, createAt: getDate(), body: body));
+    messages.add(
+        Messages(from: fromUser, to: toUser, createAt: getDate(), body: body));
     notifyListeners();
 
-
-  //
+    //
   }
 
-  void sendImageMessage(String text, String imageUrl, From fromUser, From toUser) {
+  void sendImageMessage(
+      String text, String imageUrl, From fromUser, From toUser) {
     String body = jsonEncode({
       "type": "text",
       "text": text,
@@ -100,7 +114,8 @@ class ChatModel with ChangeNotifier {
       "to": toUser.sId,
       "body": body,
     });
-    messages.add(Messages(from: fromUser, to: toUser, createAt: getDate(), body: body));
+    messages.add(
+        Messages(from: fromUser, to: toUser, createAt: getDate(), body: body));
     notifyListeners();
   }
 
@@ -114,7 +129,8 @@ class ChatModel with ChangeNotifier {
       "to": toUser.sId,
       "body": body,
     });
-    messages.add(Messages(from: fromUser, to: toUser, createAt: getDate(), body: body));
+    messages.add(
+        Messages(from: fromUser, to: toUser, createAt: getDate(), body: body));
     notifyListeners();
   }
 }

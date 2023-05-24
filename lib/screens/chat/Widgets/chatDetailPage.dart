@@ -16,7 +16,7 @@ import '../../../network/uploadFile_request1.dart';
 
 class ChatDetailPage extends StatefulWidget {
   ChatUser chatUser;
-  
+
   ChatDetailPage({super.key, required this.chatUser});
 
   @override
@@ -30,35 +30,15 @@ void _scrollBottom() {
   print('okk');
 }
 
-
 class _ChatDetailPageState extends State<ChatDetailPage> {
-
-
- Future<void> _initStateAsync() async {
-    await Future.delayed(Duration.zero);
-        if (_scrollController.hasClients) {
-          _scrollController.animateTo(
-            _scrollController.position.maxScrollExtent,
-            curve: Curves.easeOut,
-            duration: const Duration(milliseconds: 10),
-          );
-        };
-    print('Init complete!');
-  }
-
   @override
   void initState() {
     // TODO: implement initState
-    
+
     Provider.of<ChatModel>(context, listen: false)
         .getChatHistory(widget.chatUser.userId);
-         _initStateAsync();
 
     super.initState();
-//  WidgetsBinding.instance!.addPostFrameCallback((_) {
-//       _scrollBottom();
-//     });
-
   }
 
   TextEditingController chatTextController = TextEditingController();
@@ -123,7 +103,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   final ImagePicker _picker = ImagePicker();
 
   void myValueSetter(int progress) {
-    EasyLoading.showProgress((progress / 100), status: 'Đang tải ảnh lên: $progress%');
+    EasyLoading.showProgress((progress / 100),
+        status: 'Đang tải ảnh lên: $progress%');
   }
 
   String? imgURL;
@@ -147,6 +128,16 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   Widget build(BuildContext context) {
     return Consumer2<ChatModel, UserProvider>(
         builder: (context, chatModel, userProvider, child) {
+      print(chatModel.hasChanged);
+      if (chatModel.hasChanged) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent,
+            duration: Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+          );
+        });
+      }
       return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -275,7 +266,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                                 )
                               : Text(
                                   parseMessageBody(
-                                      chatModel.messages[index].body!),                                  
+                                      chatModel.messages[index].body!),
                                   style: const TextStyle(
                                       color: Colors.black, fontSize: 15),
                                 ),
@@ -301,12 +292,12 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                         final XFile? image = await _picker.pickImage(
                             source: ImageSource.gallery);
                         if (image != null) {
-                           SharedPreferences.getInstance().then((prefs) {
+                          SharedPreferences.getInstance().then((prefs) {
                             String access_token =
                                 prefs.get('access_token') as String;
-                                print(access_token);
-                             UploadFileRequest.fetchUploadFile(access_token,
-                                 'image', image, myValueSetter, setThumbnail);
+                            print(access_token);
+                            UploadFileRequest.fetchUploadFile(access_token,
+                                'image', image, myValueSetter, setThumbnail);
                           });
                           setState(() {
                             showIMG = true;
@@ -318,7 +309,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                             showIMG = false;
                             pathIMG = '';
                           });
-                        }                        
+                        }
                       },
                       child: Container(
                         height: 40,
@@ -367,8 +358,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                         setState(() {
                           showIMG = false;
                         });
-                       
-                       handleSubmitChat(userProvider.getUserObj());
+
+                        handleSubmitChat(userProvider.getUserObj());
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           if (_scrollController.hasClients) {
                             _scrollController.animateTo(

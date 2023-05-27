@@ -46,8 +46,16 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
 
   List<Map<String, String>> priceOptions = [
     {
+      'value': '500000',
+      'label': '500 nghìn',
+    },
+    {
       'value': '1000000',
       'label': '1 triệu',
+    },
+    {
+      'value': '200000',
+      'label': '2 triệu',
     },
     {
       'value': '5000000',
@@ -566,6 +574,8 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
                             roomGte: roomGte != null ? int.parse(roomGte!) : null,
                             bathRoomGte: bathRoomGte != null ? int.parse(bathRoomGte!) : null,
                             bedRoomGte: bedRoomGte != null ? int.parse(bedRoomGte!) : null,
+                            priceFrom: priceFrom != null ? double.parse(priceFrom!) : null,
+                            priceTo: priceTo != null ? double.parse(priceTo!) : null
                           );
                           if ( value.results![0]!.geometry?.location?.lat != null &&  value.results![0]!.geometry?.location?.lng != null) {
                             Navigator.of(context).push(scaleInTransition(

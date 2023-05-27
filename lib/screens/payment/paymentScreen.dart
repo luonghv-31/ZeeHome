@@ -99,7 +99,7 @@ class PaymentScreen extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    top: 32,
+                    top: 40,
                     left: 12,
                     child: CircleAvatar(
                         backgroundColor: secondaryColor10LightTheme,

@@ -93,7 +93,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
  DarwinNotificationDetails darwinNotificationDetails = DarwinNotificationDetails();
   NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails, iOS: darwinNotificationDetails);
 
-  await flutterLocalNotificationsPlugin.show(0, 'this is title', 'this is body',
+  await flutterLocalNotificationsPlugin.show(0, 'Zee Home', 'Bạn có tin nhắn mới',
       notificationDetails, payload: 'this is payload'
   );
   if (message.notification != null) {

@@ -12,7 +12,7 @@ import 'package:zeehome/model/userProvider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 
-import '../../../network/uploadFile_request1.dart';
+import 'package:zeehome/network/uploadFile_request1.dart';
 
 class ChatDetailPage extends StatefulWidget {
   ChatUser chatUser;

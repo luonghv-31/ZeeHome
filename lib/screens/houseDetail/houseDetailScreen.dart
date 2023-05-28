@@ -25,12 +25,32 @@ class HouseDetailScreen extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(houseDetail.title.toString()!, style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w800, color: Colors.black),)
+              Flexible(
+                child: Container(
+                  child: Text(
+                    houseDetail.title.toString()!,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: Colors.black),
+                  ),
+                ),
+              ),
+              // Text(houseDetail.title.toString()!, overflow: TextOverflow.fade, softWrap: false, maxLines: 1 , style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w800, color: Colors.black),)
             ],
           ),
           Row(
             children: [
-              Text(houseDetail.address.toString()!, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w400, color: Colors.black)),
+              Flexible(
+                child: Container(
+                  child: Text(
+                    houseDetail.address.toString()!,
+                    overflow: TextOverflow.fade,
+                    maxLines: 2,
+                    softWrap: false,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400, color: Colors.black),
+                  ),
+                ),
+              ),
+              // Text(houseDetail.address.toString()!, overflow: TextOverflow.fade, softWrap: false, maxLines: 1, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w400, color: Colors.black)),
             ],
           ),
         ],
@@ -480,7 +500,7 @@ class HouseDetailScreen extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('${houseDetail.price} vnd', style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 26),),
+                              Text('${houseDetail.price} vnd', style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 24),),
                             ],
                           ),
                         ),

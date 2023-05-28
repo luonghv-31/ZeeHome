@@ -158,7 +158,7 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
   ];
 
 
-  List<Map<String, String>> houseCategoryOptions = [
+  List<Map<String, String>> houseTypeOptions = [
     {
       'value': '1',
       'label': 'Chung cư',
@@ -181,7 +181,7 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
     }
   ];
 
-  List<Map<String, String>> houseTypeOptions = [
+  List<Map<String, String>> houseCategoryOptions = [
     {
       'value': '1',
       'label': 'Cho bán',

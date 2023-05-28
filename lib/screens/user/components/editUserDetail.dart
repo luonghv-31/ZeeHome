@@ -2,11 +2,12 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:zeehome/model/user.dart';
 import 'package:intl/intl.dart';
 import 'package:zeehome/model/userProvider.dart';
-import 'package:zeehome/network/uploadFile_request.dart';
+import 'package:zeehome/network/uploadFile_request1.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:zeehome/network/user/edit_user_request.dart';
 
@@ -34,6 +35,7 @@ class _EditUserDetailState extends State<EditUserDetail> {
   String? gender;
   final f = DateFormat('dd-MM-yyyy');
   final inputFormat = DateFormat("yyyy-MM-dd");
+    final ImagePicker _picker = ImagePicker();
 
   List<Map<String, String>> genderList = [
     {
@@ -80,7 +82,7 @@ class _EditUserDetailState extends State<EditUserDetail> {
             child: Column(
               children: [
                 Container(
-                  margin: const EdgeInsets.only(top: 20),
+                  margin: const EdgeInsets.only(top: 35),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -100,9 +102,9 @@ class _EditUserDetailState extends State<EditUserDetail> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 0),
                 Container(
-                  margin: const EdgeInsets.only(top: 16, left: 10, right: 10),
+                  margin: const EdgeInsets.only(top: 2, left: 10, right: 10),
                   padding: const EdgeInsets.only(top: 8, left: 12, right: 12, bottom: 8),
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -127,12 +129,15 @@ class _EditUserDetailState extends State<EditUserDetail> {
                               const SizedBox(height: 8,),
                               ElevatedButton(
                                 onPressed: () async {
-                                  var picked = await FilePicker.platform.pickFiles(
-                                    withReadStream: true
-                                  );
+                                  // var picked = await FilePicker.platform.pickFiles(
+                                  //   withReadStream: true
+                                  // );
 
-                                  if (picked != null) {
-                                    UploadFileRequest.fetchUploadFile(widget.access_token, 'image', picked.files.first, myValueSetter, setImageKey).then((value) => {
+                                  final XFile? image = await _picker.pickImage(
+                            source: ImageSource.gallery);
+
+                                  if (image != null) {
+                                    UploadFileRequest.fetchUploadFile(widget.access_token, 'image', image, myValueSetter, setImageKey).then((value) => {
 
                                     });
                                   }

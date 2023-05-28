@@ -62,7 +62,10 @@ class HouseListRequest {
     } else if (response.statusCode == 404) {
       throw Exception('Not Found');
     } else {
-      throw Exception('Can\'t not get posts');
+      print(response.statusCode);
+     throw Exception('Can\'t not get posts');
+      
+      
     }
   }
 }

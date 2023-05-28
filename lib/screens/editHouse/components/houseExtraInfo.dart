@@ -2,11 +2,12 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zeehome/model/houseProvider.dart';
 import 'package:zeehome/model/houses/house.dart';
 import 'package:zeehome/network/house/edit_house_request.dart';
-import 'package:zeehome/network/uploadFile_request.dart';
+import 'package:zeehome/network/uploadFile_request1.dart';
 import 'package:zeehome/screens/houseDetail/houseDetailScreen.dart';
 import 'package:zeehome/utils/constants.dart';
 
@@ -92,6 +93,8 @@ class _HouseExtraInfoState extends State<HouseExtraInfo> {
     },
   );
 
+ final ImagePicker _picker = ImagePicker();
+ 
   final ButtonStyle elevatedButtonStyle = ElevatedButton.styleFrom(
     elevation: 0,
     minimumSize: const Size(100, 36),
@@ -412,13 +415,12 @@ class _HouseExtraInfoState extends State<HouseExtraInfo> {
                         const SizedBox(height: 6,),
                         ElevatedButton(
                           onPressed: () async {
-                            var picked = await FilePicker.platform.pickFiles(
-                                withReadStream: true
-                            );
-                            if (picked != null) {
+                            final XFile? image = await _picker.pickImage(
+                            source: ImageSource.gallery);
+                            if (image != null) {
                               SharedPreferences.getInstance().then((prefs) {
                                 String access_token = prefs.get('access_token') as String;
-                                UploadFileRequest.fetchUploadFile(access_token, 'image', picked.files.first, myValueSetter, setThumbnail);
+                                UploadFileRequest.fetchUploadFile(access_token, 'image', image, myValueSetter, setThumbnail);
                               });
                             }
                           },

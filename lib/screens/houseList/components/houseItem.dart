@@ -59,7 +59,20 @@ class HouseItem extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(itemInfo.title!, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black),),
+                    Row(
+                      children: [
+                        Container(
+                          width: 200,
+                          child: Text(
+                            itemInfo.title!,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style:const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.black),
+                          ),
+                        ),
+                      ],
+                    ),
+                    // Text(itemInfo.title!, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black),),
                     const SizedBox(height: 12,),
                     Text('${itemInfo.price.toString()!} vnd', style: const TextStyle(fontSize: 16, color: Colors.black54))
                   ],

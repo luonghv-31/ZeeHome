@@ -63,7 +63,6 @@ class House {
 
   factory House.fromJson(Map<String, dynamic> json) {
     List<String>? _images = json['images'] != null ? (json['images'] as List)?.map((e) => e as String)?.toList() : [];
-
     return House(
       houseId: json['houseId'].toString(),
       latitude: json['latitude'] as double,
@@ -78,7 +77,7 @@ class House {
       houseType: json['houseType'] as int?,
       thumbnail: json['thumbnail']!,
       images: _images,
-      price: json['price'] as double?,
+      price: double.parse(json['price'].toString()),
       video: json['video'] == null ? null : json['video'],
       visible: json['visible'] as bool?,
       square: json['square'] as double?,

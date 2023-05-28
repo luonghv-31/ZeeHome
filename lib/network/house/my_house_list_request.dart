@@ -5,9 +5,10 @@ import 'package:http/http.dart' as http;
 import 'package:zeehome/model/houses/houseList.dart';
 
 class MyHouseListRequest {
-  static List<House> parseMyHouseList(String responseBody) {
+  static List<House> parseHouseList(String responseBody) {
     var h = json.decode(responseBody) as Map<String, dynamic>;
-    final hl = HouseList.fromJson(h).houses?.toList();
+    debugPrint(HouseList.fromJson(h).houses?.toString());
+    final List<House>? hl = HouseList.fromJson(h).houses?.toList();
     return hl!;
   }
 
@@ -25,7 +26,7 @@ class MyHouseListRequest {
     final response = await http.get(uri);
 
     if (response.statusCode == 200) {
-      return compute( parseMyHouseList, utf8.decode(response.bodyBytes));
+      return compute( parseHouseList, utf8.decode(response.bodyBytes));
     } else if (response.statusCode == 404) {
       throw Exception('Not Found');
     } else {

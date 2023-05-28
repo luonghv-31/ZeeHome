@@ -52,6 +52,6 @@
             <data android:scheme="tel" />
         </intent>
         <!-- build failed  -->
-
     </queries>
+    <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

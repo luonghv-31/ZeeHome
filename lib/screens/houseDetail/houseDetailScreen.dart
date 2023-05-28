@@ -34,7 +34,6 @@ class HouseDetailScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              // Text(houseDetail.title.toString()!, overflow: TextOverflow.fade, softWrap: false, maxLines: 1 , style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w800, color: Colors.black),)
             ],
           ),
           Row(
@@ -50,7 +49,6 @@ class HouseDetailScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              // Text(houseDetail.address.toString()!, overflow: TextOverflow.fade, softWrap: false, maxLines: 1, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w400, color: Colors.black)),
             ],
           ),
         ],

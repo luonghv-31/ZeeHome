@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:video_player/video_player.dart';
 import 'package:zeehome/model/houseProvider.dart';
 import 'package:zeehome/model/houses/house.dart';
 import 'package:zeehome/network/house/edit_house_request.dart';
@@ -36,6 +37,8 @@ class _HouseExtraInfoState extends State<HouseExtraInfo> {
   String? video;
   String? images;
   final double CardRadius = 10;
+  late VideoPlayerController _controller;
+
 
   @override
   void initState() {
@@ -75,11 +78,28 @@ class _HouseExtraInfoState extends State<HouseExtraInfo> {
 
     if (houseInfo.video != null) {
       setState(() {
-        video = houseInfo.video;
+        video = houseInfo.video.toString();
       });
+
+      _controller = VideoPlayerController.network(houseInfo!.video!);
+
+      _controller.addListener(() {
+        setState(() {});
+      });
+      _controller.setLooping(true);
+      _controller.initialize().then((_) => setState(() {}));
+      _controller.play();
     }
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (_controller.value.isInitialized) {
+      _controller.dispose();
+    }
+    super.dispose();
   }
 
   final MaterialStateProperty<Icon?> thumbIcon =
@@ -500,7 +520,14 @@ class _HouseExtraInfoState extends State<HouseExtraInfo> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          child: video != null ? Image.network(video!) : null,
+                          child: video != null ?  Container(
+                            child: _controller.value.isInitialized
+                            ? AspectRatio(
+                              aspectRatio: _controller.value.aspectRatio,
+                              child: VideoPlayer(_controller),
+                            )
+                            : Container(),
+                          ) : null,
                         ),
                         const SizedBox(height: 6,),
                         ElevatedButton(

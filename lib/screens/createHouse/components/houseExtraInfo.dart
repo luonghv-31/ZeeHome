@@ -2,6 +2,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:video_player/video_player.dart';
 import 'package:zeehome/model/houses/house.dart';
 import 'package:zeehome/network/house/create_house_request.dart';
 import 'package:zeehome/network/uploadFile_request.dart';
@@ -36,6 +37,13 @@ class _HouseExtraInfoState extends State<HouseExtraInfo> {
   String? video;
   String? images;
   final double CardRadius = 10;
+  late VideoPlayerController _controller;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   final MaterialStateProperty<Icon?> thumbIcon =
   MaterialStateProperty.resolveWith<Icon?>(
@@ -93,7 +101,16 @@ class _HouseExtraInfoState extends State<HouseExtraInfo> {
     EasyLoading.dismiss();
     setState(() {
       video = imageKey;
+
     });
+    _controller = VideoPlayerController.network(imageKey);
+
+    _controller.addListener(() {
+      setState(() {});
+    });
+    _controller.setLooping(true);
+    _controller.initialize().then((_) => setState(() {}));
+    _controller.play();
   }
 
   @override
@@ -386,7 +403,12 @@ class _HouseExtraInfoState extends State<HouseExtraInfo> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          child: video != null ? Image.network(video!) : null,
+                          child: _controller.value.isInitialized
+                              ? AspectRatio(
+                            aspectRatio: _controller.value.aspectRatio,
+                            child: VideoPlayer(_controller),
+                          )
+                              : Container(),
                         ),
                         const SizedBox(height: 6,),
                         ElevatedButton(

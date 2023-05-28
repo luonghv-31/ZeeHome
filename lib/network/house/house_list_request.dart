@@ -53,9 +53,8 @@ class HouseListRequest {
       'bathRoomGte': houseListParameter.bathRoomGte != null ? houseListParameter.bathRoomGte.toString() : null,
       "mapPoint": houseListParameter.mapPoint,
     });
-    final response = await http.get(uri);
 
-    debugPrint(response.body);
+    final response = await http.get(uri);
 
     if (response.statusCode == 200) {
       return compute( parseHouseList, utf8.decode(response.bodyBytes));

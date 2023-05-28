@@ -40,33 +40,7 @@ class HouseListRequest {
   }
 
   static Future<List<House>> fetchHouseList(HouseListParameter houseListParameter) async {
-    // final uri = Uri.https('huydt.online', '/api/houses', {
-    //   'queryFor': houseListParameter.queryFor.toString(),
-    //   'queryType': houseListParameter.queryType.toString(),
-    //   'distance': houseListParameter.distance,
-    //   'polygonPoints': houseListParameter.polygonPoints,
-    //   'mapPoint': houseListParameter,
-    //   'showInvisible': houseListParameter.showInvisible.toString(),
-    //   'pageSize': houseListParameter.pageSize.toString(),
-    //   'pageNumber': houseListParameter.pageNumber.toString(),
-    //
-    //   'roomGte': houseListParameter.roomGte.toString(),
-    //   'bedRoomGte': houseListParameter.bedRoomGte.toString(),
-    //   'bathRoomGte': houseListParameter.bathRoomGte.toString(),
-    //   'priceFrom': houseListParameter.priceFrom.toString(),
-    //   'priceTo': houseListParameter.priceTo.toString(),
-    //   'hasAc': houseListParameter.hasAc.toString(),
-    //   'hasParking': houseListParameter.hasParking.toString(),
-    //   'hasElevator': houseListParameter.hasElevator.toString(),
-    //   'hasFurnished': houseListParameter.hasFurnished.toString(),
-    //   'allowPet': houseListParameter.allowPet.toString(),
-    //   'houseCategory': houseListParameter.houseCategory.toString(),
-    //   'houseType': houseListParameter.houseType.toString(),
-    // });
-    // final Map<String, dynamic> params = toJson(houseListParameter);
-    // String queryString = Uri.parse(houseListParameter).query;
 
-    debugPrint(houseListParameter.priceFrom.toString() + " ---  " + houseListParameter.priceTo.toString());
     final uri = Uri.https('huydt.online', '/api/houses', {
       "distance": houseListParameter.distance.toString(),
       "queryFor": houseListParameter.queryFor,

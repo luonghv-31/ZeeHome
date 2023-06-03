@@ -44,7 +44,6 @@ class _HouseExtraInfoState extends State<HouseExtraInfo> {
   void initState() {
     // TODO: implement initState
     House houseInfo = widget.houseProvider.getHouseInfor();
-    debugPrint(houseInfo.images.toString());
 
     setState(() {
       price.text = houseInfo.price.toString();
@@ -96,8 +95,10 @@ class _HouseExtraInfoState extends State<HouseExtraInfo> {
 
   @override
   void dispose() {
-    if (_controller.value.isInitialized) {
-      _controller.dispose();
+    if (video != null) {
+      if (_controller.value.isInitialized) {
+        _controller.dispose();
+      }
     }
     super.dispose();
   }

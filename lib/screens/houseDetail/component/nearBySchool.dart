@@ -18,7 +18,6 @@ class _NearBySchoolComponentState extends State<NearBySchoolComponent> {
   @override
   void initState() {
     // TODO: implement initState
-    debugPrint(widget.location);
     GetNearByPlaceRequest.fetchNearBy( widget.location, 800, 'university').then((value) => {
       setState(() {
         nbrp = value;

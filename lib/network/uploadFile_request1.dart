@@ -15,14 +15,10 @@ class UploadFileRequest {
       'Authorization': 'Bearer $access_token',
     });
 
-    debugPrint('start uploading');
-
     eventSource.listen((event) async {
       if(event.event == 'GUID') {
         myValueSetter(0);
         final GUID = event.data;
-        debugPrint(GUID);
-
 
         var request = http.MultipartRequest("POST", Uri.parse(postFileUrl));
         request.headers.addAll({
@@ -37,7 +33,6 @@ class UploadFileRequest {
 
         final response = await http.Response.fromStream(responseStream);
 
-        debugPrint(response.body.toString());
         getImageKey(response.body.toString());
       }
       if(event.event == 'progress') {

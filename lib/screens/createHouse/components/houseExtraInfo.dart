@@ -37,11 +37,13 @@ class _HouseExtraInfoState extends State<HouseExtraInfo> {
   String? video;
   String? images;
   final double CardRadius = 10;
-  late VideoPlayerController _controller;
+  late VideoPlayerController? _controller;
 
   @override
   void dispose() {
-    _controller.dispose();
+    if (_controller!.value.isInitialized) {
+      _controller!.dispose();
+    }
     super.dispose();
   }
 
@@ -105,12 +107,12 @@ class _HouseExtraInfoState extends State<HouseExtraInfo> {
     });
     _controller = VideoPlayerController.network(imageKey);
 
-    _controller.addListener(() {
+    _controller!.addListener(() {
       setState(() {});
     });
-    _controller.setLooping(true);
-    _controller.initialize().then((_) => setState(() {}));
-    _controller.play();
+    _controller!.setLooping(true);
+    _controller!.initialize().then((_) => setState(() {}));
+    _controller!.play();
   }
 
   @override
@@ -403,12 +405,12 @@ class _HouseExtraInfoState extends State<HouseExtraInfo> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          child: _controller.value.isInitialized
+                          child: video != null ?  _controller!.value.isInitialized
                               ? AspectRatio(
-                            aspectRatio: _controller.value.aspectRatio,
-                            child: VideoPlayer(_controller),
-                          )
-                              : Container(),
+                                aspectRatio: _controller!.value.aspectRatio,
+                                child: VideoPlayer(_controller!),
+                                )
+                              : Container() : null,
                         ),
                         const SizedBox(height: 6,),
                         ElevatedButton(

@@ -42,11 +42,9 @@ class SignUpRequest {
     ).timeout(
       const Duration(seconds: 10),
       onTimeout: () {
-        debugPrint('timeOut');
         throw Exception('Some error happen'); // Request Timeout response status code
       },
     );
-    debugPrint(response.statusCode.toString());
     return response.statusCode;
   }
 }

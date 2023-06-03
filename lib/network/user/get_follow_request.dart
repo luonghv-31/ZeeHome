@@ -12,7 +12,6 @@ class GetFollowRequest {
   }
 
   static Future<bool> fetchFollowRequest(String access_token, String userId) async {
-    debugPrint(userId);
     final response = await http.get(
       Uri.parse('$url/${userId}'),
       headers: <String, String> {

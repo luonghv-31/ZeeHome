@@ -8,7 +8,6 @@ const String url = 'https://huydt.online/api/houses';
 class CreateHouseRequest {
 
   static Future<bool> fetchCreateHouse(String access_token, House houseInfo ) async {
-    debugPrint(houseInfo.toString());
     final response = await http.post(
       Uri.parse(url),
       body: jsonEncode({
@@ -47,9 +46,6 @@ class CreateHouseRequest {
         throw Exception('Some error happen'); // Request Timeout response status code
       },
     );
-
-    debugPrint(response.statusCode.toString());
-    debugPrint(response.body.toString());
 
     if (response.statusCode == 200) {
       return true;

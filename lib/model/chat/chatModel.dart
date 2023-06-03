@@ -8,7 +8,6 @@ import 'package:zeehome/model/chat/ChatMessages.dart';
 import 'package:zeehome/model/chat/chatDetail.dart';
 import 'package:zeehome/model/chat/chatWithUsers.dart';
 
-
 class ChatModel with ChangeNotifier {
   List<ChatWith> chatWiths = [];
   List<Messages> messages = [];
@@ -67,9 +66,6 @@ class ChatModel with ChangeNotifier {
         (data) => {
               debugPrint(data.toString()),
             });
-
-    // socket.onDisconnect((_) => print('disconnect'));
-    // socket.on('fromServer', (_) => print(_));
   }
 
   void getChatWith() {
@@ -83,7 +79,6 @@ class ChatModel with ChangeNotifier {
   }
 
   String getDate() {
-    debugPrint(DateTime.now().toString());
     return DateTime.now().toString();
   }
 

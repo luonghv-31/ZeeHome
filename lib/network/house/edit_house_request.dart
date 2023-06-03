@@ -7,7 +7,6 @@ const String url = 'https://huydt.online/api/houses';
 class UpdateHouseRequest {
 
   static Future<bool> fetchUpdateHouse(String access_token, House houseInfo ) async {
-    debugPrint(houseInfo.rooms.toString());
     final response = await http.put(
       Uri.parse('https://huydt.online/api/houses/${houseInfo.houseId}'),
       body: jsonEncode({
@@ -46,9 +45,6 @@ class UpdateHouseRequest {
         throw Exception('Some error happen'); // Request Timeout response status code
       },
     );
-
-    debugPrint(response.statusCode.toString());
-    debugPrint(response.body.toString());
 
     if (response.statusCode == 200) {
       return true;

@@ -17,7 +17,6 @@ class SetFcmTokenRequest {
       },
     );
 
-    debugPrint(response.body);
     if (response.statusCode == 200) {
       return true;
     } else if (response.statusCode == 404) {

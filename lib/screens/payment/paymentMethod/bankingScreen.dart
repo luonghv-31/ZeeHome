@@ -77,11 +77,7 @@ class _BankingScreenState extends State<BankingScreen> {
                     const SizedBox(height: 20,),
                     ElevatedButton(
                       onPressed: () {
-                        debugPrint(amountController.text);
                         if (_formKey.currentState!.validate()) {
-                          // ScaffoldMessenger.of(context).showSnackBar(
-                          //   const SnackBar(content: Text('Đang chờ xử lý')),
-                          // );
                           GetBankingRequest.fetchBanking(authProvider.accessToken, int.parse(amountController.text) * 100, 'string').then((value) => {
                             showDialog<String>(
                               context: context,

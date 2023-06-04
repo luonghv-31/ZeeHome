@@ -24,11 +24,6 @@ class ChatDetailPage extends StatefulWidget {
 }
 
 ScrollController _scrollController = new ScrollController();
-void _scrollBottom() {
-  _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-      duration: Duration(milliseconds: 1), curve: Curves.easeOut);
-  print('okk');
-}
 
 class _ChatDetailPageState extends State<ChatDetailPage> {
   @override
@@ -128,7 +123,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   Widget build(BuildContext context) {
     return Consumer2<ChatModel, UserProvider>(
         builder: (context, chatModel, userProvider, child) {
-      print(chatModel.hasChanged);
       if (chatModel.hasChanged) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           _scrollController.animateTo(

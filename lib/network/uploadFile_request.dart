@@ -24,7 +24,7 @@ class UploadFileRequest {
           "Accept": "application/json",
           "Authorization": "Bearer $access_token",
         });
-        request.fields['file_type'] = 'image';
+        request.fields['file_type'] = fileType;
         request.fields['GUID'] = GUID!;
         request.files.add( await http.MultipartFile.fromPath('file', file.path! ));
 

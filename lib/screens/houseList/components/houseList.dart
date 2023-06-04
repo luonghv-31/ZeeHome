@@ -36,7 +36,6 @@ class _HouseListState extends State<HouseList> {
         _pagingController.appendLastPage(newItems);
       } else {
         final nextPageKey = pageKey + newItems.length;
-        // final nextPageKey = pageKey + 1;
         _pagingController.appendPage(newItems, nextPageKey);
       }
     } catch (error) {
@@ -77,7 +76,6 @@ class _HouseListState extends State<HouseList> {
           return HouseItem(itemInfo: item, refreshCallBack: refreshCallBack,);
         },
         noItemsFoundIndicatorBuilder: (_) => noItemFoundIndicator(),
-        // noMoreItemsIndicatorBuilder: (_) => NoMoreItemsIndicator(),
       ),
       separatorBuilder: (context, index) => const SizedBox(height: 0,),
     ),

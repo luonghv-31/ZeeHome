@@ -36,6 +36,17 @@ class _HouseBasicInforState extends State<HouseBasicInfor> {
   List<Map<String, String>> houseCategoryOptions = [
     {
       'value': '1',
+      'label': 'Cho bán',
+    },
+    {
+      'value': '2',
+      'label': 'Cho thuê'
+    },
+  ];
+
+  List<Map<String, String>> houseTypeOptions = [
+    {
+      'value': '1',
       'label': 'Chung cư',
     },
     {
@@ -54,17 +65,6 @@ class _HouseBasicInforState extends State<HouseBasicInfor> {
       'value': '5',
       'label': 'Nhà trọ'
     }
-  ];
-
-  List<Map<String, String>> houseTypeOptions = [
-    {
-      'value': '1',
-      'label': 'Cho bán',
-    },
-    {
-      'value': '2',
-      'label': 'Cho thuê'
-    },
   ];
 
   @override

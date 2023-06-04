@@ -12,7 +12,7 @@ class ChatModel with ChangeNotifier {
   List<ChatWith> chatWiths = [];
   List<Messages> messages = [];
 
- bool hasChanged = false; 
+  bool hasChanged = false;
 
   late IO.Socket socket;
 
@@ -31,7 +31,6 @@ class ChatModel with ChangeNotifier {
       socket.emit('FE_get_chat_with', {});
     });
 
-   
     socket.on('FE_receive_message', (data) {
       ChatDetail chatDetail = ChatDetail.fromJson(data);
       Messages newMessage = Messages(
@@ -39,11 +38,11 @@ class ChatModel with ChangeNotifier {
           to: chatDetail.chat?.to,
           body: chatDetail.chat?.body,
           createAt: chatDetail.chat?.createAt);
-      messages.add(newMessage);    
-  
-    hasChanged =true;
-      getChatWith();  
-      
+
+      debugPrint(data.toString());
+      messages.add(newMessage);
+      hasChanged = true;
+      getChatWith();
       notifyListeners();
     });
 

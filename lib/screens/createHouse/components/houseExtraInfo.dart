@@ -420,7 +420,7 @@ class _HouseExtraInfoState extends State<HouseExtraInfo> {
                             );
 
                             if (picked != null) {
-                              UploadFileRequest.fetchUploadFile(widget.access_token, 'video', picked.files.first, myValueSetter, setThumbnail).then((value) => {
+                              UploadFileRequest.fetchUploadFile(widget.access_token, 'video', picked.files.first, myValueSetter, setVideo).then((value) => {
                               });
                             }
                           },
